@@ -46,7 +46,7 @@
 | 日夜、黄昏、雾与情绪氛围 | `blender-time-of-day` | 按现有场景选择，不默认重建环境 |
 | 雨雪、湿润、积水、闪电等 | `blender-weather-fx` | 需要动态时补充模拟或动画 |
 | 布料、刚体、流体等模拟 | `blender-simulation` | 缓存、单位和烘焙开销须与任务相符 |
-| 插件/扩展开发、面板、Operator、打包 | `blender-addon-development` | 和场景编辑分开；开发任务不自动安装或发布插件 |
+| 插件/扩展开发、面板、Operator、打包 | `blender-addon-development` | 和场景编辑分开；开发任务不自动安装或发布插件。目标仓库已有协作规则（如 CLAUDE.md/AGENTS.md 规定的模块归属）、需要分支策略或要用真实连接做 operator 端到端验证时，另见 [blender-addon-maintenance](../../addon-development/SKILL.md) |
 | 批处理、无界面流水线、格式转换 | `blender-pipeline-automation` | 显式限定输入集合和输出目录 |
 | 几何检查、法线、穿插/漂浮、交付检查 | `blender-asset-qa` | 按实际修改触发；查询节点无需检查全库网格 |
 | 完整道具/角色/产品出图等多阶段任务 | `blender-workflow-recipes` | 用其组织阶段，再逐阶段装载相应专题 |
