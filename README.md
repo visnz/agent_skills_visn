@@ -11,6 +11,7 @@
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 场景读取、多实例连接、跨工程复制、节点组资产入库和缩略图验证 |
+| 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
 | After Effects | 待实际任务后添加 | 按真实需求积累 AE 工程和操作经验 |
 
@@ -26,16 +27,26 @@
 agent_skills_visn/
 ├── README.md
 ├── LICENSE
-└── blender/
-    └── blender-workflow/
-        ├── SKILL.md
-        ├── agents/
-        │   └── openai.yaml
-        ├── scripts/
-        │   └── blender_rpc.py
-        └── references/
-            ├── asset-library.md
-            └── 2026-10-30-water-normal.md
+├── blender/
+│   └── blender-workflow/
+│       ├── SKILL.md
+│       ├── agents/
+│       │   └── openai.yaml
+│       ├── scripts/
+│       │   └── blender_rpc.py
+│       └── references/
+│           ├── asset-library.md
+│           └── 2026-10-30-water-normal.md
+└── blog_setup/
+    ├── SKILL.md
+    ├── agents/
+    │   └── openai.yaml
+    ├── scripts/
+    │   ├── convert-media.js
+    │   └── check-refs.js
+    └── references/
+        ├── media-conversion.md
+        └── git-collaboration.md
 ```
 
 按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`、`ae/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。
