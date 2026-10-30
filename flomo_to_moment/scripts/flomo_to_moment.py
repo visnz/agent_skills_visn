@@ -95,7 +95,7 @@ def parse_memo(md_path, image_dir):
         if m:
             title = m.group(1)
             title_idx = i
-        break
+            break
 
     # 2. 清理：删除标题行、flomo 标签行、原文链接行，其余保留（含空行）
     clean = []
@@ -106,7 +106,7 @@ def parse_memo(md_path, image_dir):
         if not s:
             clean.append('')
             continue
-        if re.match(r'^#\S', s):  # flomo 标签行（# 后无空格）
+        if re.match(r'^(?:#\S+\s*)+$', s):  # flomo 标签行（一个或多个 #标签，标签间可用空格）
             continue
         if re.match(r'^\[[^\]]*\]\(https://flomoapp\.com/', s):  # 原文链接
             continue
