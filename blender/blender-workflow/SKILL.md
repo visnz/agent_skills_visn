@@ -34,7 +34,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 ## 按本次实际需求工作
 
 - “节点单独入库”意味着可复用的节点组资产；“合并进资产库文件”意味着将数据追加到指定主 `.blend` 并保存。临时导出文件只是中间产物，不能当作已经完成合并。
-- 保留用户当前节点实例上的参数。节点组接口默认值可能与用户调好的实例值不同，导出副本时需要核对。
+- 区分组接口默认值、实例参数和外部连接/驱动值。按用户本次要求选择参数来源：明确保留组默认值时不以实例覆盖；明确保存当前效果时核对实例值。只在导出副本中调整，不把某次入库的选择推广到所有资产。
 - 完整资产入库默认处理现有分类和缩略图；用户明确只要求检查、追加或暂不制作预览时按本次范围执行，不扩展任务。需要缩略图时优先制作能说明效果的 Blender 渲染预览，查看实际图像后再嵌入资产。
 - 用户要求操作时，完成已经授权的检查、复制和验证。只有目标或内容确实无法确定时再提问；必要的权限申请遵守运行环境要求。
 - 上述做法来自已发生的资产入库需求。不要据此擅自重整整个资产库、删除其他资产、覆盖同名内容或修改全局 MCP 配置。
@@ -52,6 +52,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 
 - 普通场景查询或编辑：先读相关对象、材质、修改器等状态，再实施最小必要变更，按可观察结果验证。
 - 节点组入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
+- 同名资产更新、带控制器/材质驱动的系统同步：在入库参考基础上读取 [references/asset-sync.md](references/asset-sync.md)，先比较依赖与变更范围，保留库内布局，再验证实际联动。
 - 复盘本次操作或理解这些约定的来源：读取 [references/2026-10-30-water-normal.md](references/2026-10-30-water-normal.md)。其中路径仅为历史案例，执行前必须重新确认。
 - 整理新的 Blender 经验、维护入口或评估是否拆分技能：读取 [references/skill-maintenance.md](references/skill-maintenance.md)。普通场景操作无需加载这份维护资料。
 
