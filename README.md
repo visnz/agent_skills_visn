@@ -26,6 +26,9 @@
 ```text
 agent_skills_visn/
 ├── README.md
+├── AGENTS.md
+├── docs/
+│   └── skill-building.md
 ├── LICENSE
 ├── blender/
 │   └── blender-workflow/
@@ -72,7 +75,7 @@ agent_skills_visn/
 
 ```text
 读取个人入口并判断任务
-  → 下载/读取 blender-core
+  → 只读查询可先用现有工具；修改/交付前下载或离线读取 blender-core
   → 下载/读取当前阶段所需专题
   → 应用个人工作流和本次用户要求
   → 检查现场、执行、验证
@@ -89,7 +92,7 @@ python blender/blender-workflow/scripts/prepare_community_skills.py --skills ble
 
 `blender-core` 自动加入；Agent 必须实际读取输出 JSON 的 `load_order`，不能将“已下载”当成“已加载”。默认使用系统临时缓存；可加 `--cache-dir` 指向仓库外的持久可写目录。重复使用校验缓存，无需联网；无网络且无完整缓存时会明确失败，不伪装装载成功。Blender/MCP 运行能力仍由当前机器或宿主提供。
 
-常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
+常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，经验归档和后续拆分条件见 [Blender 技能维护](blender/blender-workflow/references/skill-maintenance.md)。缺少完整缓存或版本不适用时可继续独立只读查询，依赖缺失资料的修改/交付步骤暂停；筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
 
 ### 在 Codex 中关联安装个人入口
 
@@ -136,6 +139,18 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 
 这些是当前证据支持的需求；后续根据新的任务和明确反馈修订，不把一次性的参数或目录当成永久偏好。
 
+## 技能建设约定
+
+每次真实任务结束都可以复盘，但不要求每次新增 Skill。先判断经验是否会改善后续任务，再选择更新已有技能、补充参考资料、修正脚本、保存案例或待验证记录、新建技能，或无需修改。
+
+- 从具体触发场景和用户目标出发，检查已有技能，优先更新能够合理容纳该经验的内容。
+- 区分通用规则、条件性流程、可执行脚本、历史案例和待验证判断；一次任务的路径、参数与工具行为不自动成为通用要求。
+- 每条规则说明必要的适用条件和验证依据。区分观察到的事实、推测原因，以及本次有效和后续实践中再次验证有效。
+- 维护说明与实际能力的一致性，检查入口、引用和脚本；不宣称未验证或尚未实现的能力。
+- 按任务规模记录，微调不必另建复盘文件；没有新增可复用信息时，可以明确无需修改。
+
+详细判断问题、归档选择、验证及交付要求见 [技能建设规范](docs/skill-building.md)。Agent 在本仓库新增或更新技能前，应遵循 [AGENTS.md](AGENTS.md) 并读取该规范。README 负责介绍与导航，详细方法统一在规范中维护。
+
 ## 后续新增或更新
 
 1. 从一项真实任务出发，说明触发条件和用户想得到的结果。
@@ -147,3 +162,11 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 ## License
 
 仓库授权以 [LICENSE](LICENSE) 为准。
+
+## 任务规模、沉淀提醒与特殊任务
+
+- 开始执行前先粗估工作量、需要的上下文和验证成本；工作范围明显扩大时重新评估。预计涉及大批量文件、反复长链试错、长时间运行或大量资料装载时，先反馈范围、主要成本与可缩小方案，等待用户选择后开展高成本部分。不虚构精确 token 消耗。
+- 一项较完整、较大的任务结束或接近结束，且确有值得复用的新经验时，提醒一次并询问是否按本 README 及建设规范整理技能。小修、普通问答和同一任务的中间步骤不反复提醒；用户已经要求整理时直接完成，无需再问。
+- `Special_Missions` 允许保存任务专用流程、明确限定的环境参数与特殊经验，不要求都推广为通用技能。仍须区分事实和推测、如实声明验证范围，并保证脚本和说明一致。
+
+这些约定适用于读到本仓库规则的 Agent。若希望其他项目也普遍遵守，应在相应项目或用户级规则中明确引用；仅修改本仓库 README 不会自动约束所有对话。

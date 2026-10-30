@@ -28,10 +28,10 @@ description: 维护 visn 的 Hexo 博客（hexo_visn）。核心是优化图片/
 
 按需选择步骤；参数与坑详见 [references/media-conversion.md](references/media-conversion.md)；脚本在 [scripts/](scripts/) 下，用项目根路径作为参数运行。
 
-1. **gif → mp4**：跳过 `cover:` 引用的封面 gif，其余用 `ffmpeg -i x.gif -c:v libx264 -pix_fmt yuv420p -crf 26 -movflags faststart x.mp4`，成功后删 gif 并替换引用。
-2. **png → webp**：`ffmpeg -i x.png -c:v libwebp -quality 80 -lossless 0 x.webp`。
-3. **jpg 原地压缩**：`magick x.jpg -auto-orient -resize 2560x2560> -quality 82 -strip x.jpg`，只处理 >400KB 大图，避免小图二次劣化。
-4. **替换引用 + 校验**：用 basename 映射替换 md/yml/json 引用，跑 [scripts/check-refs.js](scripts/check-refs.js) 确认 0 个 404。
+1. **gif → mp4**：跳过 `cover:` 引用的封面 gif，其余用 `ffmpeg -i x.gif -c:v libx264 -pix_fmt yuv420p -crf 26 -movflags faststart x.mp4`，先验证可解码且体积更小，再按完整路径替换支持的引用；保留原 gif。
+2. **png → webp**：采用 q80 的候选结果前检查可解码和体积；保留原 png，已有同名输出则跳过。
+3. **jpg 原地压缩**：`magick x.jpg -auto-orient -resize 2560x2560> -quality 82 -strip x.jpg`，只处理 >400KB 大图；候选有效且更小时才采用。脚本在项目根 `.media-conversion-backup/` 保存原件与输出哈希，同一结果重跑不再次压缩；原文件变化则停止处理该文件并报告。该目录不应提交或发布。
+4. **替换引用 + 校验**：用 [scripts/media-refs.js](scripts/media-refs.js) 按解析后的完整路径替换 md/yml/yaml/json/html/css 中支持的媒体引用，保留查询参数和片段；跑 [scripts/check-refs.js](scripts/check-refs.js) 初筛。动态主题模板、srcset、引用式 Markdown 需另查，不再批量修改 categories.ejs。
 5. **前端懒加载**：正文 filter 把 `<img src="*.mp4">` 转 `<video loop muted playsinline preload="none">`，其余 `<img>` 注入 `loading="lazy"`；前端 IntersectionObserver 懒播放视频；首页/画廊封面加 `loading="lazy"`。
 
 ## 关键决策点（需要问用户的）
@@ -42,8 +42,8 @@ description: 维护 visn 的 Hexo 博客（hexo_visn）。核心是优化图片/
 
 ## 完成标准
 
-- 报告转换前后体积对比（图片、媒体总体积与节省比例）。
-- [scripts/check-refs.js](scripts/check-refs.js) 通过（0 个 404），`.webp.jpg` 等误伤已修复。
+- 报告已采用文件的转换前后体积、跳过与失败情况。原始 GIF/PNG 保留会增加磁盘占用，不能将采用文件的减少量宣称为磁盘或整站流量的实际节省。
+- [scripts/check-refs.js](scripts/check-refs.js) 在支持的本地引用范围内通过；问题或运行错误返回非零状态。不将此结果称为全站 0 个 404；远程地址、生成页面和未覆盖语法另行验证。
 - 页面渲染已验证：正文动图为 `<video>`，封面为 gif/静态图且带 `loading="lazy"`。
 - 未擅自 commit/push；需要提交时先报告、等确认。
 
@@ -52,3 +52,5 @@ description: 维护 visn 的 Hexo 博客（hexo_visn）。核心是优化图片/
 - 脚本用项目根路径作参数，不硬编码某台机器的绝对路径。
 - 历史案例中的路径、端口、参数仅代表当时现场，执行前重新确认。
 - 不擅自清理用户数据、不覆盖同名文件、不修改全局 git 配置。
+
+脚本依赖 Node.js 18+、ffmpeg、ffprobe、ImageMagick（magick）。从技能目录运行 `node scripts/convert-media.js <项目根>`；回归样例运行 `node tests/test-media.js`，只在临时目录生成媒体，不处理真实博客。自动验证不替代视觉检查，人工确认前不清理原件。

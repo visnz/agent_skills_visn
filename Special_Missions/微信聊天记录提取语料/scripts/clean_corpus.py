@@ -21,6 +21,8 @@ import argparse
 import json
 import os
 import re
+import sys
+from datetime import datetime
 from collections import defaultdict
 
 # ---------------------------------------------------------------------------
@@ -83,7 +85,7 @@ def strip_noise(content):
     for pat in NOISE_PATTERNS:
         text = re.sub(pat, "", text)
     text = text.replace("</msg>", "").replace("<msg>", "")
-    text = re.sub(r"\s+", " ", text).strip()
+    text = "\n".join(re.sub(r"[^\S\n]+", " ", line).strip() for line in text.splitlines()).strip()
     return text
 
 
@@ -92,7 +94,7 @@ def parse_line(line, a_name, b_name):
     line = line.strip()
     if not line:
         return None
-    m = re.match(r"^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(.+?)\]\s?(.*)$", line)
+    m = re.match(r"^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[([^\]\n]+)\][ \t]?(.*)$", line, re.S)
     if not m:
         return None
     ts, speaker, content = m.group(1), m.group(2).strip(), m.group(3).strip()
@@ -120,7 +122,7 @@ def parse_line(line, a_name, b_name):
     elif speaker == b_name:
         role = "B"
     else:
-        role = "B" if speaker != a_name else "A"
+        raise ValueError("未知说话人：请核对 A/B 映射；不支持将第三人自动归入 B")
 
     return {"ts": ts, "speaker": speaker, "role": role, "content": content}
 
@@ -142,6 +144,80 @@ def detect_privacy(content):
     return [label for pattern, label in PRIVACY_PATTERNS if re.search(pattern, content)]
 
 
+HEADER = re.compile(r"^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(.+?)\]\s?(.*)$")
+
+
+def read_messages(lines, a_name, b_name):
+    """Assemble multiline records before filtering. Reject ambiguous input instead of dropping it."""
+    if not a_name.strip() or not b_name.strip() or a_name.strip() == b_name.strip():
+        raise ValueError("A/B 必须是两个不同的非空显示名")
+    stats = {"input_lines": 0, "records": 0, "filtered_records": 0,
+             "continuation_lines": 0, "unparsed_lines": 0, "unknown_speakers": 0}
+    records, current = [], None
+    for number, line in enumerate(lines, 1):
+        stats["input_lines"] += 1
+        line = line.rstrip("\r\n")
+        match = HEADER.match(line)
+        if match:
+            if current:
+                records.append(current)
+            current = {"line": number, "ts": match[1], "speaker": match[2].strip(), "text": match[3]}
+        elif line.startswith("[") and re.match(r"^\[\d{4}-\d{2}-\d{2}", line):
+            raise ValueError(f"第 {number} 行疑似损坏的消息头，未生成输出")
+        elif current:
+            current["text"] += "\n" + line
+            stats["continuation_lines"] += 1
+        elif line.strip():
+            stats["unparsed_lines"] += 1
+    if current:
+        records.append(current)
+    if stats["unparsed_lines"]:
+        raise ValueError(f"消息头之前存在 {stats['unparsed_lines']} 个未解析行；请核对输入格式")
+    messages = []
+    previous = None
+    barrier = False
+    for record in records:
+        stats["records"] += 1
+        timestamp = datetime.strptime(record["ts"], "%Y-%m-%d %H:%M:%S")
+        if previous is not None and timestamp < previous:
+            raise ValueError(f"第 {record['line']} 行时间倒序；请先核对导出顺序")
+        previous = timestamp
+        if record["speaker"] not in (a_name, b_name) and not record["speaker"].startswith("系统"):
+            stats["unknown_speakers"] += 1
+            raise ValueError(f"第 {record['line']} 行出现未知说话人；请核对 A/B 映射或单聊范围")
+        # parse_line handles filtering after the complete record has been assembled.
+        parsed = parse_line(f"[{record['ts']}] [{record['speaker']}] " + record['text'], a_name, b_name)
+        if parsed:
+            parsed["line"] = record["line"]
+            parsed["break_before"] = barrier
+            barrier = False
+            messages.append(parsed)
+        else:
+            stats["filtered_records"] += 1
+            barrier = True
+    if not messages:
+        raise ValueError("没有可用的双人文字消息；未生成输出")
+    return messages, stats
+
+
+def build_turns(messages, gap_minutes):
+    turns = []
+    session = 0
+    previous = None
+    for message in messages:
+        now = datetime.strptime(message["ts"], "%Y-%m-%d %H:%M:%S")
+        if previous is not None and (message["break_before"] or (now - previous).total_seconds() > gap_minutes * 60):
+            session += 1
+        if turns and turns[-1]["role"] == message["role"] and turns[-1]["session"] == session:
+            turns[-1]["content"] += "\n" + message["content"]
+            turns[-1]["lines"].append(message["line"])
+        else:
+            turns.append({"role": message["role"], "ts": message["ts"], "content": message["content"],
+                          "session": session, "lines": [message["line"]]})
+        previous = now
+    return turns
+
+
 def main():
     ap = argparse.ArgumentParser(description="清洗单聊语料为 A/B 对话")
     ap.add_argument("input", help="导出的 TXT 路径")
@@ -150,59 +226,56 @@ def main():
     ap.add_argument("--alias", default=None, help="对方称呼（用于切片标注，可省略）")
     ap.add_argument("--out", default=".", help="输出目录")
     ap.add_argument("--prefix", default="chat", help="输出文件名前缀")
+    ap.add_argument("--gap-minutes", type=float, default=30, help="会话间隔阈值（分钟，默认30，需按数据调整）")
     args = ap.parse_args()
 
-    a_name, b_name = args.a, args.b
+    a_name, b_name = args.a.strip(), args.b.strip()
     b_label = args.alias or b_name
-    os.makedirs(args.out, exist_ok=True)
+    if not (0 < args.gap_minutes < float('inf')):
+        ap.error("--gap-minutes 必须为有限正数")
+    if not args.prefix or args.prefix in ('.', '..') or '/' in args.prefix or '\\' in args.prefix:
+        ap.error("--prefix 必须是文件名前缀，不能包含路径")
+    output_paths = [os.path.join(args.out, f"{args.prefix}_{suffix}") for suffix in ('slices.txt','classified.json','privacy.txt')]
+    if any(os.path.exists(p) for p in output_paths):
+        ap.error("输出文件已存在，请换前缀或目录，不覆盖原结果")
 
     # 1. 解析
-    messages = []
-    with open(args.input, encoding="utf-8") as f:
-        for line in f:
-            p = parse_line(line, a_name, b_name)
-            if p:
-                messages.append(p)
+    with open(args.input, encoding="utf-8-sig") as f:
+        messages, stats = read_messages(f, a_name, b_name)
+    print("解析统计：" + json.dumps(stats, ensure_ascii=False))
+    os.makedirs(args.out, exist_ok=True)
 
     a_count = sum(1 for m in messages if m["role"] == "A")
     b_count = sum(1 for m in messages if m["role"] == "B")
     print(f"解析出 {len(messages)} 条纯文字消息（A={a_count}, B={b_count}）")
 
     # 2. 切片成轮次（连续同角色合并）
-    turns = []
-    cur = None
-    for m in messages:
-        if cur is None:
-            cur = {"role": m["role"], "ts": m["ts"], "content": m["content"]}
-        elif m["role"] == cur["role"]:
-            cur["content"] += "\n" + m["content"]
-        else:
-            turns.append(cur)
-            cur = {"role": m["role"], "ts": m["ts"], "content": m["content"]}
-    if cur:
-        turns.append(cur)
+    turns = build_turns(messages, args.gap_minutes)
     print(f"切片成 {len(turns)} 轮")
 
     # 3. 组成 A->B 对话对
     pairs = []
     i = 0
     while i < len(turns) - 1:
-        if turns[i]["role"] == "A" and turns[i + 1]["role"] == "B":
-            pairs.append({"user": turns[i]["content"], "assistant": turns[i + 1]["content"], "ts": turns[i]["ts"]})
+        if turns[i]["role"] == "A" and turns[i + 1]["role"] == "B" and turns[i]["session"] == turns[i + 1]["session"]:
+            pairs.append({"user": turns[i]["content"], "assistant": turns[i + 1]["content"], "ts": turns[i]["ts"],
+                          "session": turns[i]["session"], "source_lines": turns[i]["lines"] + turns[i+1]["lines"]})
             i += 2
         else:
             i += 1
     print(f"组成 {len(pairs)} 组 A→B 对话对")
+    stats.update({"text_messages": len(messages), "turns": len(turns), "pairs": len(pairs),
+                  "unpaired_turns": len(turns) - 2 * len(pairs), "gap_minutes": args.gap_minutes})
 
     # 4. 输出切片（忠实原文）
     slices_path = os.path.join(args.out, f"{args.prefix}_slices.txt")
-    with open(slices_path, "w", encoding="utf-8") as f:
+    with open(slices_path, "x", encoding="utf-8") as f:
         f.write(f"# 单聊切片（A={a_name}/我，B={b_name}/{b_label}）\n")
         f.write(f"# 共 {len(turns)} 轮，{len(pairs)} 组 A→B 对话对\n")
         f.write("#" + "=" * 70 + "\n\n")
         for t in turns:
             who = "A(我)" if t["role"] == "A" else f"B({b_label})"
-            f.write(f"[{t['ts']}] {who}：\n{t['content']}\n\n")
+            f.write(f"[{t['ts']}] {who}（会话{t['session']+1}；源行{t['lines']}）：\n{t['content']}\n\n")
     print(f"[OK] 切片 -> {slices_path}")
 
     # 5. 场景分类
@@ -211,8 +284,8 @@ def main():
         scene = classify_scene(p["assistant"]) or classify_scene(p["user"])
         classified[scene or "未分类"].append(p)
     cls_path = os.path.join(args.out, f"{args.prefix}_classified.json")
-    with open(cls_path, "w", encoding="utf-8") as f:
-        json.dump({"scenes": {k: v for k, v in classified.items()}}, f, ensure_ascii=False, indent=2)
+    with open(cls_path, "x", encoding="utf-8") as f:
+        json.dump({"stats": stats, "scenes": {k: v for k, v in classified.items()}}, f, ensure_ascii=False, indent=2)
     print(f"[OK] 场景分类 -> {cls_path}")
     for scene, items in sorted(classified.items(), key=lambda x: -len(x[1])):
         print(f"    {scene}: {len(items)} 组")
@@ -223,7 +296,7 @@ def main():
         for label in detect_privacy(m["content"]):
             privacy.append({"ts": m["ts"], "role": m["role"], "type": label, "content": m["content"][:80]})
     priv_path = os.path.join(args.out, f"{args.prefix}_privacy.txt")
-    with open(priv_path, "w", encoding="utf-8") as f:
+    with open(priv_path, "x", encoding="utf-8") as f:
         f.write(f"疑似隐私内容提示（共 {len(privacy)} 处，请人工判断是否删除）\n")
         f.write("=" * 60 + "\n\n")
         for h in privacy:
@@ -236,4 +309,8 @@ def main():
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except (ValueError, OSError) as error:
+        print(f"处理失败：{error}", file=sys.stderr)
+        raise SystemExit(1)

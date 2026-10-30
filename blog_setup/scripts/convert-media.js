@@ -1,198 +1,114 @@
 #!/usr/bin/env node
-/**
- * 媒体转换脚本（幂等，可重复运行）：
- *   - gif -> mp4   (H.264, crf 26, 用于画廊/正文动图，体积约 -85%)
- *   - png -> webp  (q80 有损)
- *   - jpg -> 原地压缩 (长边 2560, q82, auto-orient + 去 EXIF, 仅 >400KB)
- *   - 跳过 front-matter cover 引用的 gif（封面动图保留不转）
- *  并替换 source 下 .md/.yml/.json 与 categories.ejs 中的引用。
- *
- * 依赖：ffmpeg、ImageMagick(magick)，均在 PATH 中。
- * 用法：node convert-media.js <hexo项目根路径>
- *   <hexo项目根路径> 缺省时为当前目录。
+/** Node 18+, ffmpeg/ffprobe and ImageMagick in PATH.
+ * node convert-media.js <hexo-root>
+ * Keeps originals, refuses existing output files, adopts only smaller decodable results.
+ * JPG originals and hash state live in <root>/.media-conversion-backup (exclude from Git).
+ * Theme templates and dynamic references require separate review; this script never rewrites them.
  */
+'use strict';
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
-
-const ROOT = path.resolve(process.argv[2] || '.');
-const SRC = path.join(ROOT, 'source');
-const THEME_LAYOUT = path.join(ROOT, 'themes', 'hexo-theme-quiet', 'layout'); // 按实际主题名调整
-
-const JPG_MIN = 400 * 1024; // 只压缩大于 400KB 的 jpg，避免小图二次劣化
-
-function walk(dir, exts, out = []) {
-  let entries;
-  try {
-    entries = fs.readdirSync(dir, { withFileTypes: true });
-  } catch (e) {
-    return out;
+const crypto = require('crypto');
+const {execFileSync} = require('child_process');
+const {walk, references, resolveRef, check} = require('./media-refs');
+const hash = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+function run(cmd, args) { return execFileSync(cmd, args, {encoding:'utf8', windowsHide:true, stdio:['ignore','pipe','pipe']}); }
+function probe(file) {
+  const data = JSON.parse(run('ffprobe', ['-v','error','-select_streams','v:0','-show_entries','stream=width,height','-of','json',file]));
+  const s = data.streams && data.streams[0];
+  if (!s || !(s.width > 0 && s.height > 0)) throw new Error('No valid image/video stream: ' + file);
+  run('ffmpeg', ['-v','error','-xerror','-i',file,'-f','null','-']);
+  return s;
+}
+function writeAtomic(file, value) {
+  const tmp = file + '.' + crypto.randomUUID() + '.tmp';
+  try { fs.writeFileSync(tmp, value, {flag:'wx'}); fs.renameSync(tmp, file); }
+  finally { if(fs.existsSync(tmp)) fs.unlinkSync(tmp); }
+}
+function main(root) {
+  const source = path.join(root,'source');
+  if (!fs.statSync(source).isDirectory()) throw new Error('Missing source directory');
+  const initial = check(root);
+  if (initial.problems.length) throw new Error('Fix source-reference problems first: ' + JSON.stringify(initial.problems));
+  const owners = walk(source, ['.md','.yml','.yaml','.json','.html','.css']);
+  const docs = owners.map(file => ({file, text:fs.readFileSync(file,'utf8')}));
+  const cover = new Set();
+  for(const doc of docs) for(const ref of references(doc.text)) {
+    const resolved = resolveRef(ref.value, doc.file, source);
+    if(ref.kind === 'cover' && resolved && resolved.target) cover.add(resolved.target);
   }
-  for (const ent of entries) {
-    if (ent.name.startsWith('.')) continue;
-    const full = path.join(dir, ent.name);
-    if (ent.isDirectory()) {
-      walk(full, exts, out);
-    } else if (exts.includes(path.extname(ent.name).toLowerCase())) {
-      out.push(full);
+  const backup = path.join(root,'.media-conversion-backup');
+  const statePath = path.join(backup,'state.json');
+  const state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath,'utf8')) : {};
+  const mapping = new Map();
+  let failures = 0, saved = 0;
+  const mediaFiles = walk(source, ['.gif','.png','.jpg','.jpeg']);
+  for(const file of mediaFiles) {
+    const ext = path.extname(file).toLowerCase();
+    const jpg = ext === '.jpg' || ext === '.jpeg';
+    if(ext === '.gif' && cover.has(file)) { console.log('[保留封面] ' + path.relative(root,file)); continue; }
+    const output = jpg ? file : file.slice(0,-ext.length) + (ext === '.gif' ? '.mp4' : '.webp');
+    const key = path.relative(source,file).replace(/\\/g,'/');
+    const bytes = fs.statSync(file).size;
+    const digest = hash(file);
+    if(jpg && state[key]) {
+      if(state[key].outputHash === digest) { console.log('[已处理] ' + key); continue; }
+      console.error('[需检查] JPG 与已保存状态不同，未再次压缩: ' + key); failures++; continue;
     }
-  }
-  return out;
-}
-
-function run(cmd, args) {
-  try {
-    execFileSync(cmd, args, { stdio: 'pipe', windowsHide: true });
-  } catch (e) {
-    const detail = (e.stderr || e.message || '').toString().trim();
-    throw new Error(cmd + ' ' + args.slice(0, 3).join(' ') + ' ... ' + detail.slice(0, 400));
-  }
-}
-
-function fmt(bytes) {
-  return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-}
-
-const mapping = []; // { oldBase, newBase }
-
-function main() {
-  const before = totalMediaSize();
-  console.log('转换前媒体总体积: ' + fmt(before) + '\n');
-
-  // 0. 用作封面的 gif 保留不动（封面以 <img> 渲染，gif 动图是有意为之）
-  const coverGifs = findCoverGifs();
-
-  // 1. gif -> mp4
-  for (const gif of walk(SRC, ['.gif'])) {
-    if (coverGifs.has(path.basename(gif))) {
-      console.log('[gif保留] ' + path.relative(ROOT, gif) + '  (封面动图，跳过转换)');
-      continue;
-    }
-    const mp4 = gif.replace(/\.gif$/i, '.mp4');
-    const tmp = mp4 + '.tmp.mp4';
-    console.log('[gif->mp4] ' + path.relative(ROOT, gif));
+    if(jpg && bytes <= 400*1024) continue;
+    if(!jpg && fs.existsSync(output)) { console.log('[目标已存在，跳过] ' + key); continue; }
+    const tmp = path.join(path.dirname(file), '.' + crypto.randomUUID() + '.tmp' + path.extname(output));
     try {
-      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', gif,
-        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '26', '-movflags', 'faststart', tmp]);
-      fs.renameSync(tmp, mp4);
-      fs.unlinkSync(gif);
-      mapping.push({ oldBase: path.basename(gif), newBase: path.basename(mp4) });
-    } catch (e) {
-      console.error('  !! 失败，跳过: ' + e.message);
-      if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
-    }
-  }
-
-  // 2. png -> webp
-  for (const png of walk(SRC, ['.png'])) {
-    const webp = png.replace(/\.png$/i, '.webp');
-    const tmp = webp + '.tmp.webp';
-    console.log('[png->webp] ' + path.relative(ROOT, png));
-    try {
-      run('ffmpeg', ['-y', '-loglevel', 'error', '-i', png,
-        '-c:v', 'libwebp', '-quality', '80', '-lossless', '0', tmp]);
-      fs.renameSync(tmp, webp);
-      fs.unlinkSync(png);
-      mapping.push({ oldBase: path.basename(png), newBase: path.basename(webp) });
-    } catch (e) {
-      console.error('  !! 失败，跳过: ' + e.message);
-      if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
-    }
-  }
-
-  // 3. jpg 原地压缩
-  for (const jpg of walk(SRC, ['.jpg', '.jpeg'])) {
-    const size = fs.statSync(jpg).size;
-    if (size < JPG_MIN) continue;
-    const tmp = jpg + '.tmp.jpg';
-    console.log('[jpg压缩] ' + path.relative(ROOT, jpg) + '  (' + fmt(size) + ')');
-    try {
-      run('magick', [jpg, '-auto-orient', '-resize', '2560x2560>', '-quality', '82', '-strip', tmp]);
-      fs.renameSync(tmp, jpg);
-    } catch (e) {
-      console.error('  !! 失败，跳过: ' + e.message);
-      if (fs.existsSync(tmp)) fs.unlinkSync(tmp);
-    }
-  }
-
-  // 4. 替换引用
-  replaceRefs();
-
-  const after = totalMediaSize();
-  console.log('\n==== 转换完成 ====');
-  console.log('媒体总体积: ' + fmt(before) + ' -> ' + fmt(after) + '   (节省 ' + fmt(Math.max(0, before - after)) + ')');
-}
-
-/**
- * 找出 front-matter cover 字段中引用的 gif 文件名（basename）。
- * 这些 gif 用作封面动图（以 <img> 渲染），保留原样不转 mp4。
- */
-function findCoverGifs() {
-  const coverGifs = new Set();
-  const coverRe = /^cover:\s*['"]?([^'"\n]+\.gif)['"]?\s*$/gm;
-  for (const f of walk(SRC, ['.md'])) {
-    let content;
-    try {
-      content = fs.readFileSync(f, 'utf8');
-    } catch (e) {
-      continue;
-    }
-    let m;
-    while ((m = coverRe.exec(content)) !== null) {
-      coverGifs.add(path.basename(m[1]));
-    }
-  }
-  return coverGifs;
-}
-
-function replaceRefs() {
-  const bmap = {};
-  for (const m of mapping) bmap[m.oldBase] = m.newBase;
-
-  if (Object.keys(bmap).length === 0) {
-    console.log('无 gif/png 转换，跳过引用替换');
-    return;
-  }
-
-  let changedFiles = 0;
-
-  // 普通 basename 替换（gif->mp4, png->webp）
-  for (const f of walk(SRC, ['.md', '.yml', '.json'])) {
-    let content = fs.readFileSync(f, 'utf8');
-    let changed = false;
-    for (const [oldBase, newBase] of Object.entries(bmap)) {
-      if (content.includes(oldBase)) {
-        content = content.split(oldBase).join(newBase);
-        changed = true;
+      if(jpg) run('magick',[file,'-auto-orient','-resize','2560x2560>','-quality','82','-strip',tmp]);
+      else if(ext === '.gif') run('ffmpeg',['-n','-v','error','-i',file,'-c:v','libx264','-pix_fmt','yuv420p','-crf','26','-movflags','faststart',tmp]);
+      else run('ffmpeg',['-n','-v','error','-i',file,'-c:v','libwebp','-quality','80','-lossless','0',tmp]);
+      const resultBytes = fs.statSync(tmp).size;
+      if(!resultBytes || resultBytes >= bytes) { console.log('[未变小，保留] ' + key); continue; }
+      probe(tmp);
+      if(jpg) {
+        const original = path.join(backup,'originals',key);
+        fs.mkdirSync(path.dirname(original),{recursive:true});
+        fs.copyFileSync(file, original, fs.constants.COPYFILE_EXCL);
+        // Persist intended result before replacing; an interrupted run fails closed on hash mismatch.
+        state[key] = {originalHash:digest, outputHash:hash(tmp), original:path.relative(root,original)};
+        writeAtomic(statePath,JSON.stringify(state,null,2)+'\n');
+        if(hash(file) !== digest) throw new Error('Source changed during conversion');
+        fs.renameSync(tmp,file);
+      } else {
+        if(hash(file) !== digest) throw new Error('Source changed during conversion');
+        fs.copyFileSync(tmp,output,fs.constants.COPYFILE_EXCL);
+        mapping.set(file,output);
       }
+      saved += bytes-resultBytes;
+      console.log('[采用] ' + key + ': ' + bytes + ' -> ' + resultBytes);
+    } catch(e) { failures++; console.error('[失败] ' + key + ': ' + e.message); }
+    finally { if(fs.existsSync(tmp)) fs.unlinkSync(tmp); }
+  }
+  // Read originals remain available even if reference editing fails or the process is interrupted.
+  for(const doc of docs) {
+    let text = doc.text;
+    for(const ref of references(doc.text).reverse()) {
+      const resolved = resolveRef(ref.value,doc.file,source);
+      const next = resolved && mapping.get(resolved.target);
+      if(!next) continue;
+      const clean = ref.value.replace(/[?#].*$/,'');
+      const extension = path.extname(next);
+      const value = clean.replace(/\.[^.\/\\]+$/,extension) + resolved.suffix;
+      text = text.slice(0,ref.start)+value+text.slice(ref.end);
     }
-    if (changed) {
-      fs.writeFileSync(f, content, 'utf8');
-      console.log('[引用替换] ' + path.relative(ROOT, f));
-      changedFiles++;
+    if(text !== doc.text) {
+      if(fs.readFileSync(doc.file,'utf8') !== doc.text) throw new Error('Document changed during conversion: '+doc.file);
+      writeAtomic(doc.file,text);
     }
   }
-
-  // categories.ejs 中硬编码的 .png 扩展名（分类图标动态拼接）
-  const catEjs = path.join(THEME_LAYOUT, 'categories.ejs');
-  if (fs.existsSync(catEjs)) {
-    let c = fs.readFileSync(catEjs, 'utf8');
-    if (c.includes('%>.png')) {
-      c = c.split('%>.png').join('%>.webp');
-      fs.writeFileSync(catEjs, c, 'utf8');
-      console.log('[引用替换] themes/.../layout/categories.ejs  (%>.png -> %>.webp)');
-    }
-  }
-
-  console.log('共替换 ' + changedFiles + ' 个 Markdown/数据文件');
+  const final = check(root);
+  for(const p of final.problems) console.error(JSON.stringify(p));
+  console.log(`已采用结果合计减少 ${(saved/1024/1024).toFixed(2)} MB；原始 GIF/PNG 仍保留，因此磁盘总占用可能增加。`);
+  console.log('需另行检查视觉效果、主题动态路径和生成页面；确认全部引用后再人工决定是否删除原件。JPG 备份与状态: '+backup);
+  return failures || final.problems.length ? 1 : 0;
 }
-
-function totalMediaSize() {
-  let total = 0;
-  for (const f of walk(SRC, ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.mp4'])) {
-    total += fs.statSync(f).size;
-  }
-  return total;
+if(require.main === module) {
+  try { process.exitCode = main(path.resolve(process.argv[2] || '.')); }
+  catch(e) { console.error(e.message); process.exitCode=1; }
 }
-
-main();
+module.exports = {main};
