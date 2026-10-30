@@ -10,7 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 场景读取、多实例连接、跨工程复制、节点组资产入库和缩略图验证 |
+| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按任务下载社区基础/专题，再执行个人场景、多实例、资产入库与缩略图工作流 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
 | After Effects | 待实际任务后添加 | 按真实需求积累 AE 工程和操作经验 |
@@ -30,13 +30,17 @@ agent_skills_visn/
 ├── blender/
 │   └── blender-workflow/
 │       ├── SKILL.md
+│       ├── community-skills.json
 │       ├── agents/
 │       │   └── openai.yaml
 │       ├── scripts/
-│       │   └── blender_rpc.py
+│       │   ├── blender_rpc.py
+│       │   └── prepare_community_skills.py
 │       └── references/
 │           ├── asset-library.md
-│           └── 2026-10-30-water-normal.md
+│           ├── 2026-10-30-water-normal.md
+│           ├── community-routing.md
+│           └── community-sources.md
 └── blog_setup/
     ├── SKILL.md
     ├── agents/
@@ -61,6 +65,33 @@ agent_skills_visn/
 仓库是技能源文件合集，放入仓库不等于已经安装到 Agent 的技能发现目录。可以直接让助手读取指定技能：
 
 > 请读取这个仓库的 `blender/blender-workflow/SKILL.md`，从当前选中的节点开始，把它合并进我指定的资产库文件，保留参数并制作缩略图。
+
+### Blender 社区技能：需要时由 Agent 下载
+
+本仓库不 fork 或收存社区技能源码，只维护个人规则、专题分流、来源版本与下载器。其他 Agent clone 后读取上面的技能入口，即可分析任务、按需下载并读取相关技能，再开始执行。
+
+```text
+读取个人入口并判断任务
+  → 下载/读取 blender-core
+  → 下载/读取当前阶段所需专题
+  → 应用个人工作流和本次用户要求
+  → 检查现场、执行、验证
+```
+
+默认社区来源为 [EL4CTEO/blender-skills](https://github.com/EL4CTEO/blender-skills)。基础技能和 21 个专题按固定 commit 下载到仓库外缓存，配套脚本、参考和许可证一起获取；下载器不执行远端代码，也不全局安装全部专题。固定版本和哈希位于 [community-skills.json](blender/blender-workflow/community-skills.json)。
+
+在 clone 的仓库根目录下，例如资产整理需要场景和材质专题：
+
+```powershell
+python blender/blender-workflow/scripts/prepare_community_skills.py --list
+python blender/blender-workflow/scripts/prepare_community_skills.py --skills blender-scene-setup blender-pbr-materials
+```
+
+`blender-core` 自动加入；Agent 必须实际读取输出 JSON 的 `load_order`，不能将“已下载”当成“已加载”。默认使用系统临时缓存；可加 `--cache-dir` 指向仓库外的持久可写目录。重复使用校验缓存，无需联网；无网络且无完整缓存时会明确失败，不伪装装载成功。Blender/MCP 运行能力仍由当前机器或宿主提供。
+
+常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
+
+### 在 Codex 中关联安装个人入口
 
 Codex 当前的用户级技能目录是 `~/.agents/skills/`，支持链接到仓库中的技能文件夹，并能在任务匹配技能描述时自动选用。[官方技能文档](https://learn.chatgpt.com/docs/build-skills)
 
