@@ -12,6 +12,7 @@
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按任务下载社区基础/专题，再执行个人场景、多实例、资产入库与缩略图工作流 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
+| 博客 | [flomo-to-moment](flomo_to_moment/SKILL.md) | 把 flomo 导出 zip 同步成「铭记」说说（格式解析、图片搬运、差异化更新） |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
 | After Effects | 待实际任务后添加 | 按真实需求积累 AE 工程和操作经验 |
 
@@ -54,6 +55,14 @@ agent_skills_visn/
     └── references/
         ├── media-conversion.md
         └── git-collaboration.md
+└── flomo_to_moment/
+    ├── SKILL.md
+    ├── agents/
+    │   └── openai.yaml
+    ├── scripts/
+    │   └── flomo_to_moment.py
+    └── references/
+        └── flomo-format.md
 ```
 
 按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`、`ae/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。

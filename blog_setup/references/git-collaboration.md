@@ -35,3 +35,12 @@ git config --unset http.proxy
 ```
 
 - 备选：Linux/WSL 里用 `proxychains4 git push`（本机 WSL 未安装 proxychains，需先安装）。
+
+## 多分支部署与 rebase（main + moments_update）
+
+hexo_visn 站点 workflow 监听 `main` 与 `moments_update` 两个分支的 push，都触发部署：
+
+- `moments_update` 承载高频小更新（如说说），`main` 保持"少而重要"。
+- `moments_update` push 时，CI 先 `git merge origin/main` 拉入 main 再构建，避免其生成的聚合页（首页/归档/分类/标签）覆盖掉 main 上新文章的入口。
+- main 有重要更新后，`moments_update` 需 rebase 到新 main：`git checkout moments_update && git rebase main && git push origin moments_update`（fast-forward 时普通 push 即可，无需 force）。
+- 合并时机由开发者掌控：push 到 main 前先询问是否合并 `moments_update`。
