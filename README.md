@@ -10,7 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按任务下载社区基础/专题，再执行个人场景、多实例、资产入库与缩略图工作流 |
+| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；节点效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
@@ -55,6 +55,8 @@ agent_skills_visn/
 │   │   └── references/
 │   │       ├── asset-library.md
 │   │       ├── 2026-10-30-water-normal.md
+│   │       ├── procedural-node-effects.md
+│   │       ├── 2026-10-30-node-effects.md
 │   │       ├── community-routing.md
 │   │       └── community-sources.md
 │   └── addon-development/
@@ -122,7 +124,7 @@ python blender/blender-workflow/scripts/prepare_community_skills.py --skills ble
 
 `blender-core` 自动加入；Agent 必须实际读取输出 JSON 的 `load_order`，不能将“已下载”当成“已加载”。默认使用系统临时缓存；可加 `--cache-dir` 指向仓库外的持久可写目录。重复使用校验缓存，无需联网；无网络且无完整缓存时会明确失败，不伪装装载成功。Blender/MCP 运行能力仍由当前机器或宿主提供。
 
-常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，经验归档和后续拆分条件见 [Blender 技能维护](blender/blender-workflow/references/skill-maintenance.md)。个人资产操作分为[节点提炼入库](blender/blender-workflow/references/asset-library.md)和[既有资产同步](blender/blender-workflow/references/asset-sync.md)，后者明确依赖检查、库内布局保留与驱动联动验证。缺少完整缓存或版本不适用时可继续独立只读查询，依赖缺失资料的修改/交付步骤暂停；筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
+常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，经验归档和后续拆分条件见 [Blender 技能维护](blender/blender-workflow/references/skill-maintenance.md)。个人资产操作分为[节点提炼入库](blender/blender-workflow/references/asset-library.md)和[既有资产同步](blender/blender-workflow/references/asset-sync.md)，后者明确依赖检查、库内布局保留与驱动联动验证。既有场景的节点失效、效果迁移、界面简化和基础粒子改造另读[节点效果工作流](blender/blender-workflow/references/procedural-node-effects.md)；[天空、涟漪与粒子案例](blender/blender-workflow/references/2026-10-30-node-effects.md)保留本次证据及未解决的视觉/边界限制。缺少完整缓存或版本不适用时可继续独立只读查询，依赖缺失资料的修改/交付步骤暂停；筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
 
 ### 在 Codex 中关联安装个人入口
 

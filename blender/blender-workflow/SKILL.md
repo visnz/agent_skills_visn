@@ -51,9 +51,11 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 ## 按任务选择流程
 
 - 普通场景查询或编辑：先读相关对象、材质、修改器等状态，再实施最小必要变更，按可观察结果验证。
+- 既有节点参数失效、效果迁移、几何/材质解耦、面板简化或基础粒子改造：读取 [references/procedural-node-effects.md](references/procedural-node-effects.md)，结合控制链、采样空间、接口映射与可恢复的视觉基线处理。
 - 节点组入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
 - 同名资产更新、带控制器/材质驱动的系统同步：在入库参考基础上读取 [references/asset-sync.md](references/asset-sync.md)，先比较依赖与变更范围，保留库内布局，再验证实际联动。
 - 复盘本次操作或理解这些约定的来源：读取 [references/2026-10-30-water-normal.md](references/2026-10-30-water-normal.md)。其中路径仅为历史案例，执行前必须重新确认。
+- 复盘天空/涟漪/串珠/空气粒子的节点实践：读取 [references/2026-10-30-node-effects.md](references/2026-10-30-node-effects.md)。其中含参数回退、接口旧值与边界约束的反例，测试结果仅代表当时配置。
 - 整理新的 Blender 经验、维护入口或评估是否拆分技能：读取 [references/skill-maintenance.md](references/skill-maintenance.md)。普通场景操作无需加载这份维护资料。
 
 ## 真实 Blender 中的实现约束
@@ -64,6 +66,8 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 对外部文件的读写、后台进程和用户偏好保存，遵守当前沙箱和审批规则。目标不在可写范围时，准备好操作脚本后申请对应权限。
 - 后台辅助 Blender 使用 `--background --factory-startup --python-exit-code 1`，避免加载用户插件造成端口冲突和额外副作用。
 - 需要副本时复制数据块。不要为了导出资产而改变源工程当前使用的节点组默认值或连接。
+- 用户同时编辑其他对象时，首次确认后锁定本次目标身份；修改前重读目标模式与待改结构，避免当前选择变化切换操作对象。
+- 多轮效果调参保留本轮前的材质、节点与实例参数快照；按用户所指版本恢复。结构/链接验证与视觉满意度分别说明，程序检查通过不能代替美术验收。
 
 ## 完成标准
 
