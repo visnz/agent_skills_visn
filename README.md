@@ -13,8 +13,7 @@
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；节点效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
-| 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
-| 博客 | [flomo-to-moment](flomo_to_moment/SKILL.md) | 把 flomo 导出 zip 同步成「铭记」说说（格式解析、图片搬运、差异化更新） |
+| 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客持续维护：媒体优化、flomo 铭记同步、内容/主题与构建检查、Git 协作 |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
 | After Effects | [ae-mcp-workflow](ae/ae-mcp-workflow/SKILL.md) | 通过 AE MCP 核对连接与当前工程，按参考视频用可编辑形状和缩放制作动效，并验证渲染交付 |
 
@@ -28,64 +27,16 @@
 
 ```text
 agent_skills_visn/
-├── README.md
-├── AGENTS.md
-├── docs/
-│   └── skill-building.md
-├── LICENSE
-├── ae/
-│   └── ae-mcp-workflow/
-│       ├── SKILL.md
-│       └── references/
-│           └── 2026-10-14-corner-burst.md
-├── style3d/
-│   └── style3d-garment-workflow/
-│       ├── SKILL.md
-│       ├── scripts/
-│       └── references/
+├── README.md / AGENTS.md
+├── docs/skill-building.md
 ├── blender/
-│   ├── blender-workflow/
-│   │   ├── SKILL.md
-│   │   ├── community-skills.json
-│   │   ├── agents/
-│   │   │   └── openai.yaml
-│   │   ├── scripts/
-│   │   │   ├── blender_rpc.py
-│   │   │   └── prepare_community_skills.py
-│   │   └── references/
-│   │       ├── asset-library.md
-│   │       ├── 2026-10-30-water-normal.md
-│   │       ├── procedural-node-effects.md
-│   │       ├── 2026-10-30-node-effects.md
-│   │       ├── community-routing.md
-│   │       └── community-sources.md
-│   └── addon-development/
-│       ├── SKILL.md
-│       ├── agents/
-│       │   └── openai.yaml
-│       └── references/
-│           ├── repo-collaboration.md
-│           ├── mcp-live-testing.md
-│           ├── world-space-bbox.md
-│           └── 2026-10-31-pond-bekkan-case.md
-├── blog_setup/
-│   ├── SKILL.md
-│   ├── agents/
-│   │   └── openai.yaml
-│   ├── scripts/
-│   │   ├── convert-media.js
-│   │   └── check-refs.js
-│   └── references/
-│       ├── media-conversion.md
-│       └── git-collaboration.md
-└── flomo_to_moment/
-    ├── SKILL.md
-    ├── agents/
-    │   └── openai.yaml
-    ├── scripts/
-    │   └── flomo_to_moment.py
-    └── references/
-        └── flomo-format.md
+│   ├── blender-workflow/SKILL.md
+│   └── addon-development/SKILL.md
+├── style3d/style3d-garment-workflow/SKILL.md
+├── ae/ae-mcp-workflow/SKILL.md
+├── blog_setup/SKILL.md
+├── Special_Missions/微信聊天记录提取语料/SKILL.md
+└── flomo_to_moment/    旧命令兼容入口，无独立 Skill
 ```
 
 按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。
@@ -125,6 +76,12 @@ python blender/blender-workflow/scripts/prepare_community_skills.py --skills ble
 `blender-core` 自动加入；Agent 必须实际读取输出 JSON 的 `load_order`，不能将“已下载”当成“已加载”。默认使用系统临时缓存；可加 `--cache-dir` 指向仓库外的持久可写目录。重复使用校验缓存，无需联网；无网络且无完整缓存时会明确失败，不伪装装载成功。Blender/MCP 运行能力仍由当前机器或宿主提供。
 
 常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，经验归档和后续拆分条件见 [Blender 技能维护](blender/blender-workflow/references/skill-maintenance.md)。个人资产操作分为[节点提炼入库](blender/blender-workflow/references/asset-library.md)和[既有资产同步](blender/blender-workflow/references/asset-sync.md)，后者明确依赖检查、库内布局保留与驱动联动验证。既有场景的节点失效、效果迁移、界面简化和基础粒子改造另读[节点效果工作流](blender/blender-workflow/references/procedural-node-effects.md)；[天空、涟漪与粒子案例](blender/blender-workflow/references/2026-10-30-node-effects.md)保留本次证据及未解决的视觉/边界限制。缺少完整缓存或版本不适用时可继续独立只读查询，依赖缺失资料的修改/交付步骤暂停；筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
+
+### 博客经验的持续积累
+
+博客以 [blog-setup](blog_setup/SKILL.md) 为统一入口，媒体和 [flomo 同步](blog_setup/references/flomo-sync.md) 按需读取，原 [flomo 开发案例](blog_setup/references/2026-10-29-flomo-sync-case.md) 保留。后续博客功能优先补充流程和案例，不逐功能创建新 Skill。
+
+flomo_to_moment 目录只保留旧命令/资料链接转接；旧命令现在默认预览，写入需 --apply。若外部已有独立 flomo 技能安装，应检查并改用 blog-setup；本次不修改用户级关联。
 
 ### 在 Codex 中关联安装个人入口
 
@@ -175,7 +132,7 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 
 每次真实任务结束都可以复盘，但不要求每次新增 Skill。先判断经验是否会改善后续任务，再选择更新已有技能、补充参考资料、修正脚本、保存案例或待验证记录、新建技能，或无需修改。
 
-- 从具体触发场景和用户目标出发，检查已有技能，优先更新能够合理容纳该经验的内容。
+- 从具体触发场景和用户目标出发，检查已有技能。同一长期项目的新功能默认归入已有入口的按需流程，开发经历另存案例；独立入口有明确收益时再新建技能。
 - 区分通用规则、条件性流程、可执行脚本、历史案例和待验证判断；一次任务的路径、参数与工具行为不自动成为通用要求。
 - 每条规则说明必要的适用条件和验证依据。区分观察到的事实、推测原因，以及本次有效和后续实践中再次验证有效。
 - 维护说明与实际能力的一致性，检查入口、引用和脚本；不宣称未验证或尚未实现的能力。
