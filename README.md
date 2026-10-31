@@ -10,7 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；节点效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
+| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客持续维护：媒体优化、flomo 铭记同步、内容/主题与构建检查、Git 协作 |
@@ -125,6 +125,8 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 - “入库”和“合并进主文件”要完成到对应结果，临时导出不能冒充完成。
 - 保存用户当前调好的参数，让资产再次使用时有合理默认值。
 - 需要缩略图时，查看实际效果并验证图片已嵌入、已保存。
+- 工程卡顿分析先定位具体触发动作和实际求值分支，用对照测试支持结论；默认简报“问题位置、依据、大概原因、优先操作”，硬件和底层机制按追问展开。
+- 性能分析读取 [工程性能分析](blender/blender-workflow/references/project-performance.md)；创建或修改几何节点时另按 [节点效果工作流](blender/blender-workflow/references/procedural-node-effects.md) 检查高成本字段与烘焙输出边界。
 
 这些是当前证据支持的需求；后续根据新的任务和明确反馈修订，不把一次性的参数或目录当成永久偏好。
 

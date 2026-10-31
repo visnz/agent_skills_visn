@@ -1,6 +1,6 @@
 # 既有节点效果：诊断、迁移与参数简化
 
-仅在用户要求修复当前节点效果、迁移效果到另一对象、简化已有系统或整理可调面板时读取。社区技术资料按 [community-routing.md](community-routing.md) 选择；资产入库仍用 [asset-library.md](asset-library.md)，带驱动资产同步用 [asset-sync.md](asset-sync.md)。这里补充个人协作方式和已遇到的实现陷阱。
+在创建或修改几何节点、修复当前节点效果、迁移效果、简化已有系统或整理可调面板时按需读取。社区技术资料按 [community-routing.md](community-routing.md) 选择；资产入库仍用 [asset-library.md](asset-library.md)，带驱动资产同步用 [asset-sync.md](asset-sync.md)。这里补充个人协作方式和已遇到的实现陷阱。
 
 ## 从症状找到实际控制链
 
@@ -49,6 +49,17 @@ else:
 用户要求易调面板时，按视觉用途分 Panel，低频精度参数默认折叠。通过接口 socket 的 `description` 写悬停说明，至少解释视觉含义、数值增大/减小的方向、单位和 0 的特殊含义。非单调参数如随机种子应明确“更换排列，不代表更多/更少”；色相解释中性值与循环，不编造单调变化。
 
 ## 迁移碰撞/距离效果
+
+### Geometry Proximity：高成本字段与烘焙输出
+
+创建或修改包含 Geometry Proximity 的节点组时，把最近距离/位置查询作为重点性能检查项；成本取决于目标几何、查询域和实际求值次数，不能只凭节点数或面数归因。高精度是明确需求时保留精度，优先减少重复求值。
+
+- 不要把未经烘焙的 Geometry Proximity 字段（包括经 Map Range 等处理后的结果）直接接到用于修改器 Output Attributes 的 Group Output 属性插槽，作为已完成烘焙的交付结构。Geometry 接入 Bake 不代表旁路字段也已缓存。
+- 需要持久属性时，优先在 Bake 前将结果按正确类型和域写入命名属性，检查烘焙几何是否保留它；下游从烘焙结果读取，避免仍引用原始 Proximity 分支。具体实现须在当前 Blender 版本验证，不把 Store Named Attribute 本身当成缓存。
+- 若确需实时属性输出，明确持续求值成本，检查所有输出消费者和修改器 Output Attributes 映射，不额外添加没有消费者的调试输出。移除输出前先核对材质、下游节点与其他使用者，保留有效功能。
+- Agent 创建的节点也要检查 Geometry 与字段两条输出路径。验证烘焙时，分别比较属性输出保留/关闭后的相同触发操作，并核对效果、属性域与数值；仅见到“Baked”标签不足以交付。
+
+本次 AI 创建节点组中的旁路输出反例、用户实测与结论边界见 [工程性能分析](project-performance.md) 的案例部分。
 
 先复用源的有效计算部分，核对 Collection Info 的空间、是否需 Realize Instances、属性名称/类型/域及材质消费者。排除目标对象混入自己的碰撞集合。
 
