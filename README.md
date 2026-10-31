@@ -12,6 +12,7 @@
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按任务下载社区基础/专题，再执行个人场景、多实例、资产入库与缩略图工作流 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
+| Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
 | 博客 | [flomo-to-moment](flomo_to_moment/SKILL.md) | 把 flomo 导出 zip 同步成「铭记」说说（格式解析、图片搬运、差异化更新） |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
@@ -32,6 +33,11 @@ agent_skills_visn/
 ├── docs/
 │   └── skill-building.md
 ├── LICENSE
+├── style3d/
+│   └── style3d-garment-workflow/
+│       ├── SKILL.md
+│       ├── scripts/
+│       └── references/
 ├── blender/
 │   ├── blender-workflow/
 │   │   ├── SKILL.md
