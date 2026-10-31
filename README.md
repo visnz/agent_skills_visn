@@ -2,7 +2,7 @@
 
 我的个人 Agent 技能合集。把真实协作中验证有效的操作方法、需求和经验整理成可复用 skill，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
 
-目前从 Blender 开始；后续按需加入文本处理、After Effects 等领域。
+目前包含 Blender、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
 
 ## 技能索引
 
@@ -16,7 +16,7 @@
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客维护与媒体流量优化（gif→mp4、png→webp、jpg 压缩、懒加载、引用校验、git 规范） |
 | 博客 | [flomo-to-moment](flomo_to_moment/SKILL.md) | 把 flomo 导出 zip 同步成「铭记」说说（格式解析、图片搬运、差异化更新） |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
-| After Effects | 待实际任务后添加 | 按真实需求积累 AE 工程和操作经验 |
+| After Effects | [ae-mcp-workflow](ae/ae-mcp-workflow/SKILL.md) | 通过 AE MCP 核对连接与当前工程，按参考视频用可编辑形状和缩放制作动效，并验证渲染交付 |
 
 ### 特殊任务
 
@@ -33,6 +33,11 @@ agent_skills_visn/
 ├── docs/
 │   └── skill-building.md
 ├── LICENSE
+├── ae/
+│   └── ae-mcp-workflow/
+│       ├── SKILL.md
+│       └── references/
+│           └── 2026-10-14-corner-burst.md
 ├── style3d/
 │   └── style3d-garment-workflow/
 │       ├── SKILL.md
@@ -61,16 +66,16 @@ agent_skills_visn/
 │           ├── mcp-live-testing.md
 │           ├── world-space-bbox.md
 │           └── 2026-10-31-pond-bekkan-case.md
-└── blog_setup/
-    ├── SKILL.md
-    ├── agents/
-    │   └── openai.yaml
-    ├── scripts/
-    │   ├── convert-media.js
-    │   └── check-refs.js
-    └── references/
-        ├── media-conversion.md
-        └── git-collaboration.md
+├── blog_setup/
+│   ├── SKILL.md
+│   ├── agents/
+│   │   └── openai.yaml
+│   ├── scripts/
+│   │   ├── convert-media.js
+│   │   └── check-refs.js
+│   └── references/
+│       ├── media-conversion.md
+│       └── git-collaboration.md
 └── flomo_to_moment/
     ├── SKILL.md
     ├── agents/
@@ -81,7 +86,7 @@ agent_skills_visn/
         └── flomo-format.md
 ```
 
-按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`、`ae/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。
+按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。
 
 - `SKILL.md`：说明何时使用、核心决策与完成标准。
 - `references/`：按需读取的流程细节和真实案例。案例中的路径、端口和参数仅代表当时现场。
