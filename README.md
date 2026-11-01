@@ -2,7 +2,7 @@
 
 我的个人 Agent 技能合集。把真实协作中验证有效的操作方法、需求和经验整理成可复用 skill，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
 
-目前包含 Blender、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
+目前包含 Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
 
 ## 技能索引
 
@@ -12,6 +12,7 @@
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
+| 3D 打印 | [3d-print-analysis](3dprinter/3d-print-analysis/SKILL.md) | 分析与优化打印：结合模型、切片、实物及过程定位问题；按需装载相关技能，打印导向建模经验留在 `3dprinter/` |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
 | 博客 | [blog-setup](blog_setup/SKILL.md) | Hexo 博客持续维护：媒体优化、flomo 铭记同步、内容/主题与构建检查、Git 协作 |
 | 文本处理 | 待实际任务后添加 | 按真实需求积累编辑、整理与转换流程 |
