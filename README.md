@@ -21,7 +21,7 @@
 
 一次性或临时性的综合需求，跨多个步骤/领域，按需沉淀、不进入长期技能索引：
 
-1. [wechat-corpus-export](Special_Missions/微信聊天记录提取语料/SKILL.md) —— 微信 4.x 聊天记录解密导出、清洗成 A/B 对话语料（切片、场景分类、隐私提示）。
+1. [wechat-chat-export](Special_Missions/微信聊天记录提取语料/SKILL.md) —— 微信 4.x 聊天记录解密导出，两条分支：(1) 可离线浏览的 HTML 归档（文字/图片/语音/文件/自定义表情全量还原）；(2) A/B 对话语料（切片、场景分类、隐私提示）。
 
 ## 目录约定
 
@@ -35,7 +35,7 @@ agent_skills_visn/
 ├── style3d/style3d-garment-workflow/SKILL.md
 ├── ae/ae-mcp-workflow/SKILL.md
 ├── blog_setup/SKILL.md
-├── Special_Missions/微信聊天记录提取语料/SKILL.md
+├── Special_Missions/微信聊天记录提取语料/SKILL.md   # 微信聊天记录导出（HTML归档 + 语料两分支）
 └── flomo_to_moment/    旧命令兼容入口，无独立 Skill
 ```
 
