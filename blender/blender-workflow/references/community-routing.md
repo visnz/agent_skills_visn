@@ -55,6 +55,7 @@
 
 - **把当前水波法线节点收入主资产库**：core → scene-setup + pbr-materials → 个人 `asset-library.md`；需制作缩略图时增加 lighting-lookdev + rendering。
 - **做一个角色模型**：core → sculpting；需要成品拓扑时增加 retopology-uv，只有用户要求绑定时才加载 character-rigging。完整可动画角色可先读 workflow-recipes，再按阶段补充。
+- **给已有骨架角色摆静态动作**：core → 个人 [blender-character-posing](../../blender-character-posing/SKILL.md)；需要处理骨轴、蒙皮或权重时增加 character-rigging，需要关键帧和动作烘焙时增加 animation，不因摆姿势自动进入这些阶段。
 - **给已有角色打光出图**：core → lighting-lookdev + rendering；不因“角色”修改拓扑或重新绑定。
 - **开发材质入库插件**：core → addon-development + scene-setup；功能涉及材质时补充 pbr-materials，测试使用隔离工程。
 - **只读取当前场景**：直接使用现有只读工具；需要基础资料时加载 core，不要求为普通查询联网或运行社区脚本。

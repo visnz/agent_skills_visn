@@ -11,6 +11,7 @@
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
+| Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 给已有骨架角色按参考或动作意图摆静态姿势，检查手势、摄像机轮廓与道具接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | 3D 打印 | [3d-print-analysis](3dprinter/3d-print-analysis/SKILL.md) | 分析与优化打印：结合模型、切片、实物及过程定位问题；按需装载相关技能，打印导向建模经验留在 `3dprinter/` |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
@@ -32,6 +33,7 @@ agent_skills_visn/
 ├── docs/skill-building.md
 ├── blender/
 │   ├── blender-workflow/SKILL.md
+│   ├── blender-character-posing/SKILL.md
 │   └── addon-development/SKILL.md
 ├── style3d/style3d-garment-workflow/SKILL.md
 ├── ae/ae-mcp-workflow/SKILL.md
@@ -40,7 +42,7 @@ agent_skills_visn/
 └── flomo_to_moment/    旧命令兼容入口，无独立 Skill
 ```
 
-按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。
+按领域组织，每个可以独立使用的技能有自己的文件夹和 `SKILL.md`。后续可使用 `text/<skill-name>/`；有实际技能时再创建，不提前堆放空模板。已有角色摆静态动作可直接读 [blender-character-posing](blender/blender-character-posing/SKILL.md)，连接和社区资料的通用规则仍由 Blender 总入口维护。
 
 - `SKILL.md`：说明何时使用、核心决策与完成标准。
 - `references/`：按需读取的流程细节和真实案例。案例中的路径、端口和参数仅代表当时现场。
