@@ -19,6 +19,7 @@ description: 维护 visn 的 Hexo 博客 hexo_visn，处理媒体优化、懒加
 | --- | --- |
 | GIF/PNG/JPG 优化、懒加载、媒体引用 | [媒体流程](references/media-workflow.md)；参数与历史结果见其链接的转换复盘，不把一次节省比例当保证 |
 | flomo ZIP 导入、说说更新或同步问题 | [同步流程](references/flomo-sync.md)，按需读格式；开发证据另见流程中的历史案例 |
+| 本地 Markdown/TXT 原稿与配图导入普通文章 | [文章导入流程](references/article-import.md)，核对项目的文章字段、资源路径与首页排序；保留原稿 |
 | Git、仓库代理或已授权提交/推送 | [Git 协作](references/git-collaboration.md)；历史端口执行前核对，不修改全局配置 |
 | 其他博客内容、主题或构建修改 | 读取实际相关配置、模板和脚本，按本次功能做最小必要修改和验证；形成新经验后再补对应参考 |
 

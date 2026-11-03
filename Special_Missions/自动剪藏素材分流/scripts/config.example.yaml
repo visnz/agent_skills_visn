@@ -1,0 +1,25 @@
+# 自动剪藏素材分流 —— 配置模板
+# 复制为 config.yaml 后填写。敏感信息（token/cookie）请勿提交到仓库或公开处。
+
+wolai:
+  mcp_url: "https://api.wolai.com/v1/mcp"
+  token: "你的 Wolai MCP token"        # 也可用环境变量 WOLAI_TOKEN 覆盖
+  page_id: "剪藏页面的 page_id"
+
+eagle:
+  mcp_url: "http://127.0.0.1:41596/mcp"  # Eagle 桌面端需开启
+  tags: ["小红书"]                        # 默认入库标签
+
+xhs:
+  # 可选：小红书网页版 web_session Cookie，提高画质与成功率
+  cookie: ""
+  main_py: "XHS-Downloader 目录下的 main.py 绝对路径"
+
+x:
+  # X/推特下载需 auth_token（有账号风控风险，用户珍惜账号时走免登录或暂缓）
+  auth_token: ""
+  tags: ["X"]
+
+download:
+  temp_dir: "downloads"   # 下载临时目录
+  image_format: "PNG"

@@ -23,6 +23,7 @@
 一次性或临时性的综合需求，跨多个步骤/领域，按需沉淀、不进入长期技能索引：
 
 1. [wechat-chat-export](Special_Missions/微信聊天记录提取语料/SKILL.md) —— 微信 4.x 聊天记录解密导出，两条分支：(1) 可离线浏览的 HTML 归档（文字/图片/语音/文件/自定义表情全量还原）；(2) A/B 对话语料（切片、场景分类、隐私提示）。
+2. [auto-collect-triage](Special_Missions/自动剪藏素材分流/SKILL.md) —— 把「剪藏 → 手动搬运进素材库」自动化成本地脚本：读剪藏链接 → 下载视频/图片 → 入库 Eagle（打标签/记来源）→ 确认成功后再删源词条。沉淀「先确认两端接口能力再定架构、本地脚本优先于服务器常驻、入库成功后确认再删源」等方法论，以及多 Python 环境/下载器去重/MCP 中文编码等踩坑。
 
 ## 目录约定
 
@@ -37,6 +38,7 @@ agent_skills_visn/
 ├── ae/ae-mcp-workflow/SKILL.md
 ├── blog_setup/SKILL.md
 ├── Special_Missions/微信聊天记录提取语料/SKILL.md   # 微信聊天记录导出（HTML归档 + 语料两分支）
+├── Special_Missions/自动剪藏素材分流/SKILL.md       # 剪藏→素材库自动化脚本（下载/入库/删源）
 └── flomo_to_moment/    旧命令兼容入口，无独立 Skill
 ```
 
