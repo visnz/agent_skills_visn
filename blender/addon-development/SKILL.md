@@ -42,8 +42,10 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 
 有写入的调用中断后先重读状态，再只补缺失步骤，不盲目重放。上下文与连接细节见 [现场测试参考](references/mcp-live-testing.md)。不自动重载、安装或保存用户工程。
 
-### 5. 两个具体的 bpy 技术陷阱
+### 5. 按任务触发的 bpy 技术陷阱
 
+- **带恢复语义的开关要核对状态寿命**：插件支持代码热重载时，模块级字典可能在用户关闭开关前清空。让恢复快照在预期的重载流程中仍可取得，按钮状态以实际快照为准；丢失快照后不要猜测原设置。适用条件、验证顺序及案例见 [热重载状态参考](references/reloadable-ui-state.md)。
+- **批量处理共享数据块要说明影响范围**：从选中对象的材质槽收集材质时先去重，再核对未选中对象是否也引用相同材质；按对象选取目标不等于修改只影响该对象。
 - **图标/枚举名用前查，不凭记忆**：不同版本/图标集合未必包含某个名字；用当前连接的 Blender 实际查询枚举（如 `bpy.types.UILayout.bl_rna.functions['prop'].parameters['icon'].enum_items`，事件类型查 `Event.bl_rna.properties['type'].enum_items`）确认存在再写进代码。
 - **世界空间包围盒不能用局部 bbox 整体变换**：物体局部空间包围盒（`obj.bound_box` 的 8 个角点）本身对圆柱等非箱形几何就比真实形状宽松；物体一旦被旋转，把这 8 个角点整体乘 `matrix_world` 再求 min/max，就是"盒子套盒子"，算出的世界空间范围会比真实几何更大。需要贴合物体实际旋转/缩放表现的边界时，要逐个真实几何点（mesh 顶点、曲线端点+贝塞尔手柄）变换到世界空间后再求 min/max。技术细节、验证数据和案例见 [references/world-space-bbox.md](references/world-space-bbox.md)。
 

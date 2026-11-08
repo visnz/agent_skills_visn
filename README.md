@@ -1,6 +1,6 @@
 # agent_skills_visn
 
-我的个人 Agent 技能合集。把真实协作中验证有效的操作方法、需求和经验整理成可复用 skill，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
+我的个人 Agent 技能合集。把真实协作中的操作方法、需求、已验证经验及有价值的未完成探索整理成可复用 skill 与案例，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
 
 目前包含 Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
 
@@ -11,7 +11,7 @@
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
-| Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 给已有骨架角色按参考或动作意图摆静态姿势，检查手势、摄像机轮廓与道具接触 |
+| Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 按参考匹配相机、用骨架代理与关节投影核对大动作，适配控制器并分阶段检查手势与接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | 3D 打印 | [3d-print-analysis](3dprinter/3d-print-analysis/SKILL.md) | 分析与优化打印：结合模型、切片、实物及过程定位问题；按需装载相关技能，打印导向建模经验留在 `3dprinter/` |
 | Style3D 建模 | [style3d-garment-workflow](style3d/style3d-garment-workflow/SKILL.md) | 参考图分件、纸样与模拟验收；结合 ChatGarment 样例判断初稿价值 |
@@ -141,6 +141,7 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 
 - 从具体触发场景和用户目标出发，检查已有技能。同一长期项目的新功能默认归入已有入口的按需流程，开发经历另存案例；独立入口有明确收益时再新建技能。
 - 区分通用规则、条件性流程、可执行脚本、历史案例和待验证判断；一次任务的路径、参数与工具行为不自动成为通用要求。
+- 未成功、局部有效或暂停的探索，只要能指导后续判断就保留为案例；写明尝试状态、证据、停止理由和重试条件。相似问题先按需读旧路，避免无新依据重复试错。
 - 每条规则说明必要的适用条件和验证依据。区分观察到的事实、推测原因，以及本次有效和后续实践中再次验证有效。
 - 维护说明与实际能力的一致性，检查入口、引用和脚本；不宣称未验证或尚未实现的能力。
 - 按任务规模记录，微调不必另建复盘文件；没有新增可复用信息时，可以明确无需修改。
