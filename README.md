@@ -10,7 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
+| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点效果诊断/迁移、已有角色权重体检与基础修补、多实例、资产入库与缩略图验证 |
 | Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 按参考匹配相机、用骨架代理与关节投影核对大动作，适配控制器并分阶段检查手势与接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | 3D 打印 | [3d-print-analysis](3dprinter/3d-print-analysis/SKILL.md) | 分析与优化打印：结合模型、切片、实物及过程定位问题；按需装载相关技能，打印导向建模经验留在 `3dprinter/` |

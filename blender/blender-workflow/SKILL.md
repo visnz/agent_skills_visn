@@ -54,6 +54,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 工程卡顿、切换可见性延迟或节点求值慢：读取 [references/project-performance.md](references/project-performance.md)。从具体触发动作和当前有效分支做对照，区分实测与推测；简报定位、依据、可能原因和优先操作，硬件与底层细节按追问展开。
 - 创建或修改几何节点：按社区分流加载必要专题，并读取 [references/procedural-node-effects.md](references/procedural-node-effects.md) 中的高成本字段与烘焙输出要求；特别检查 Geometry Proximity 是否绕过 Bake 直通 Output Attributes。
 - 既有节点参数失效、效果迁移、几何/材质解耦、面板简化或基础粒子改造：读取 [references/procedural-node-effects.md](references/procedural-node-effects.md)，结合控制链、采样空间、接口映射与可恢复的视觉基线处理。
+- 已有角色的蒙皮体检、左右串动或关节权重修补：加载社区绑定专题并读取 [references/skin-weight-repair.md](references/skin-weight-repair.md)，先用隔离动作证实问题；Rigify 分段映射或旧修复路线重试时按该参考读取案例。
 - 已有骨架角色按参考或文字意图摆静态动作：读取 [blender-character-posing](../blender-character-posing/SKILL.md)；本入口负责连接、现场保留与按需社区资料，姿势、手势和接触的判断由该技能负责。
 - 节点组或集合入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
 - 同名资产更新、带控制器/材质驱动的系统同步：在入库参考基础上读取 [references/asset-sync.md](references/asset-sync.md)，先比较依赖与变更范围，保留库内布局，再验证实际联动。
