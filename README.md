@@ -2,7 +2,7 @@
 
 我的个人 Agent 技能合集。把真实协作中验证有效的操作方法、需求和经验整理成可复用 skill，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
 
-目前包含 Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
+目前包含概念设计、Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
 
 ## 技能索引
 
@@ -10,6 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
+| 概念设计 | [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md) | 从用户提供的图片识别、分块、筛选并给出资产组合方案；按创作精度与目标镜头判断风格、连接和改造量，保留脱敏经验 |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；参考图白盒、静态帧构图与比例校正、工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 给已有骨架角色按参考或动作意图摆静态姿势，检查手势、摄像机轮廓与道具接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
@@ -32,6 +33,7 @@
 agent_skills_visn/
 ├── README.md / AGENTS.md
 ├── docs/skill-building.md
+├── concept-design/concept-design-workflow/SKILL.md
 ├── blender/
 │   ├── blender-workflow/SKILL.md
 │   ├── blender-character-posing/SKILL.md
@@ -56,6 +58,12 @@ agent_skills_visn/
 仓库是技能源文件合集，放入仓库不等于已经安装到 Agent 的技能发现目录。可以直接让助手读取指定技能：
 
 > 请读取这个仓库的 `blender/blender-workflow/SKILL.md`，从当前选中的节点开始，把它合并进我指定的资产库文件，保留参数并制作缩略图。
+
+### 概念设计：从提供图片到组合方案
+
+读取 [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md)，按“用户提供图片 → 识别与分块 → 判断可用部分 → 推荐组合与必要调整”推进。沿用用户已明确的创作精度；允许艺术化处理时，重点排除明显冲突并给出可制作的首选方案，不把一般选型升级为反复考证。
+
+该入口处理视觉决策；需要在具体软件中拼装或搭建时，再进入对应操作技能。未公开项目的经验只以通用方法和[脱敏情境](concept-design/concept-design-workflow/references/anonymized-scenarios.md)保留，不附原始素材或可还原的项目描述。
 
 ### Blender 社区技能：需要时由 Agent 下载
 
