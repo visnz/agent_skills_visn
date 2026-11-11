@@ -1,6 +1,6 @@
 ---
 name: blender-workflow
-description: 操作用户正在使用的 Blender，结合个人现场保留规则与按需社区专题，处理场景查询、工程性能分析、几何节点创建、建模、材质、灯光、绑定、插件开发和资产整理；重点包括当前选择、多实例、跨工程复制、节点组入库与缩略图验证。
+description: 操作用户正在使用的 Blender，结合个人现场保留规则与按需社区专题，处理场景查询、工程性能分析、几何节点创建、参考图白盒搭建、静态帧构图与比例校正、建模、材质、灯光、绑定、插件开发和资产整理；重点包括当前选择、多实例、跨工程复制、节点组入库与缩略图验证。
 ---
 
 # Blender 个人工作流
@@ -51,6 +51,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 ## 按任务选择流程
 
 - 普通场景查询或编辑：先读相关对象、材质、修改器等状态，再实施最小必要变更，按可观察结果验证。
+- 参考图白盒、Box 粗模、建筑与人物比例校正：读取 [references/whitebox-blockout.md](references/whitebox-blockout.md)，CG 静态帧以主相机构成与镜头内可信度优先，尺度作为基准，允许为构图调整隐藏空间；明确要求实景或多视角还原时保留相应尺寸约束。二维概括与三维搭建按用户当前阶段交付。案例证据及生图能力缺口见 [references/2026-11-09-courtyard-blockout.md](references/2026-11-09-courtyard-blockout.md)。
 - 工程卡顿、切换可见性延迟或节点求值慢：读取 [references/project-performance.md](references/project-performance.md)。从具体触发动作和当前有效分支做对照，区分实测与推测；简报定位、依据、可能原因和优先操作，硬件与底层细节按追问展开。
 - 创建或修改几何节点：按社区分流加载必要专题，并读取 [references/procedural-node-effects.md](references/procedural-node-effects.md) 中的高成本字段与烘焙输出要求；特别检查 Geometry Proximity 是否绕过 Bake 直通 Output Attributes。
 - 既有节点参数失效、效果迁移、几何/材质解耦、面板简化或基础粒子改造：读取 [references/procedural-node-effects.md](references/procedural-node-effects.md)，结合控制链、采样空间、接口映射与可恢复的视觉基线处理。
