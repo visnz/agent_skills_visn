@@ -10,7 +10,7 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| 概念设计 | [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md) | 从用户提供的图片识别、分块、筛选并给出资产组合方案；按创作精度与目标镜头判断风格、连接和改造量，保留脱敏经验 |
+| 概念设计 | [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md) | 概念设计协作总入口；已沉淀美术考究与图片选型偏好，预留氛围图、细节改进、概念脑洞联想模块，按后续实际任务逐步完善 |
 | Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；参考图白盒、静态帧构图与比例校正、工程性能分析、几何节点创建与效果诊断/迁移/简化、多实例、资产入库与缩略图验证 |
 | Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 给已有骨架角色按参考或动作意图摆静态姿势，检查手势、摄像机轮廓与道具接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
@@ -59,9 +59,9 @@ agent_skills_visn/
 
 > 请读取这个仓库的 `blender/blender-workflow/SKILL.md`，从当前选中的节点开始，把它合并进我指定的资产库文件，保留参数并制作缩略图。
 
-### 概念设计：从提供图片到组合方案
+### 概念设计：按工作模块逐步完善
 
-读取 [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md)，按“用户提供图片 → 识别与分块 → 判断可用部分 → 推荐组合与必要调整”推进。沿用用户已明确的创作精度；允许艺术化处理时，重点排除明显冲突并给出可制作的首选方案，不把一般选型升级为反复考证。
+读取 [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md)，先区分本轮是美术考究、氛围图、细节改进还是概念脑洞联想。当前已沉淀美术考究专题及图片驱动的协作偏好，其他模块只预留位置，随实际任务逐步完善。选型时按“用户提供图片 → 识别与分块 → 判断可用部分 → 推荐组合与必要调整”推进；沿用创作精度，重点排除明显冲突，不把其他概念设计工作一律转成考据。
 
 该入口处理视觉决策；需要在具体软件中拼装或搭建时，再进入对应操作技能。未公开项目的经验只以通用方法和[脱敏情境](concept-design/concept-design-workflow/references/anonymized-scenarios.md)保留，不附原始素材或可还原的项目描述。
 
