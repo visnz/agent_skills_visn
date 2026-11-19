@@ -2,7 +2,7 @@
 
 我的个人 Agent 技能合集。把真实协作中的操作方法、需求、已验证经验及有价值的未完成探索整理成可复用 skill 与案例，让后续助手更快理解我的工作方式，并把操作完成到可检查、可继续使用的结果。
 
-目前包含 Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
+目前包含概念设计、Blender、3D 打印、Style3D、After Effects、博客等领域；后续按实际任务继续积累。
 
 ## 技能索引
 
@@ -10,7 +10,8 @@
 
 | 领域 | 技能 | 用途 |
 | --- | --- | --- |
-| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；工程性能分析、几何节点效果诊断/迁移、项目 NPR 双响应与法线、独立呼吸 NLA、已有角色权重体检与基础修补、多实例、资产入库与缩略图验证 |
+| 概念设计 | [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md) | 概念设计协作总入口；已沉淀美术考究与图片选型偏好，预留氛围图、细节改进、概念脑洞联想模块，按后续实际任务逐步完善 |
+| Blender | [blender-workflow](blender/blender-workflow/SKILL.md) | 按需社区专题与个人场景保留；参考图白盒、静态帧构图与比例校正、工程性能分析、资源缺失排查、几何节点创建与效果诊断/迁移/简化、项目 NPR 双响应与法线、独立呼吸 NLA、已有角色权重体检与基础修补、多实例、资产入库与缩略图验证 |
 | Blender | [blender-character-posing](blender/blender-character-posing/SKILL.md) | 按参考匹配相机、用骨架代理与关节投影核对大动作，适配控制器并分阶段检查手势与接触 |
 | Blender | [blender-addon-maintenance](blender/addon-development/SKILL.md) | 多人协作插件仓库里开发 operator/面板：模块归属与改动边界、分支与合并、留档，用真实 Blender 连接做端到端验证 |
 | 3D 打印 | [3d-print-analysis](3dprinter/3d-print-analysis/SKILL.md) | 分析与优化打印：结合模型、切片、实物及过程定位问题；按需装载相关技能，打印导向建模经验留在 `3dprinter/` |
@@ -32,6 +33,7 @@
 agent_skills_visn/
 ├── README.md / AGENTS.md
 ├── docs/skill-building.md
+├── concept-design/concept-design-workflow/SKILL.md
 ├── blender/
 │   ├── blender-workflow/SKILL.md
 │   ├── blender-character-posing/SKILL.md
@@ -57,6 +59,12 @@ agent_skills_visn/
 
 > 请读取这个仓库的 `blender/blender-workflow/SKILL.md`，从当前选中的节点开始，把它合并进我指定的资产库文件，保留参数并制作缩略图。
 
+### 概念设计：按工作模块逐步完善
+
+读取 [concept-design-workflow](concept-design/concept-design-workflow/SKILL.md)，先区分本轮是美术考究、氛围图、细节改进还是概念脑洞联想。当前已沉淀美术考究专题及图片驱动的协作偏好，其他模块只预留位置，随实际任务逐步完善。选型时按“用户提供图片 → 识别与分块 → 判断可用部分 → 推荐组合与必要调整”推进；沿用创作精度，重点排除明显冲突，不把其他概念设计工作一律转成考据。
+
+该入口处理视觉决策；需要在具体软件中拼装或搭建时，再进入对应操作技能。未公开项目的经验只以通用方法和[脱敏情境](concept-design/concept-design-workflow/references/anonymized-scenarios.md)保留，不附原始素材或可还原的项目描述。
+
 ### Blender 社区技能：需要时由 Agent 下载
 
 本仓库不 fork 或收存社区技能源码，只维护个人规则、专题分流、来源版本与下载器。其他 Agent clone 后读取上面的技能入口，即可分析任务、按需下载并读取相关技能，再开始执行。
@@ -81,6 +89,8 @@ python blender/blender-workflow/scripts/prepare_community_skills.py --skills ble
 `blender-core` 自动加入；Agent 必须实际读取输出 JSON 的 `load_order`，不能将“已下载”当成“已加载”。默认使用系统临时缓存；可加 `--cache-dir` 指向仓库外的持久可写目录。重复使用校验缓存，无需联网；无网络且无完整缓存时会明确失败，不伪装装载成功。Blender/MCP 运行能力仍由当前机器或宿主提供。
 
 常见方向包括角色雕刻 `blender-sculpting`、角色绑定 `blender-character-rigging`、灯光 `blender-lighting-lookdev`、渲染 `blender-rendering`、材质 `blender-pbr-materials`、插件开发 `blender-addon-development` 等。完整分流与组合见 [社区技能分流表](blender/blender-workflow/references/community-routing.md)，经验归档和后续拆分条件见 [Blender 技能维护](blender/blender-workflow/references/skill-maintenance.md)。个人资产操作分为[节点提炼入库](blender/blender-workflow/references/asset-library.md)和[既有资产同步](blender/blender-workflow/references/asset-sync.md)，后者明确依赖检查、库内布局保留与驱动联动验证。既有场景的节点失效、效果迁移、界面简化和基础粒子改造另读[节点效果工作流](blender/blender-workflow/references/procedural-node-effects.md)；[天空、涟漪与粒子案例](blender/blender-workflow/references/2026-10-30-node-effects.md)保留本次证据及未解决的视觉/边界限制。缺少完整缓存或版本不适用时可继续独立只读查询，依赖缺失资料的修改/交付步骤暂停；筛选理由、其他候选和本机 50 项测试记录见 [来源与验证](blender/blender-workflow/references/community-sources.md)。
+
+参考图白盒搭建与比例校正按 [白盒搭建流程](blender/blender-workflow/references/whitebox-blockout.md) 执行，静态帧优先检查主相机构成与镜头内可信度，以人物和建筑尺度为基准，允许为画面调整隐藏空间；实景或多视角还原按对应约束处理；[院落案例与二维概括探索](blender/blender-workflow/references/2026-11-09-courtyard-blockout.md) 区分已验证结果与尚未跑通的生图流程。
 
 ### 博客经验的持续积累
 
