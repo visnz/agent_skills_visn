@@ -39,6 +39,8 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 用户要求操作时，完成已经授权的检查、复制和验证。只有目标或内容确实无法确定时再提问；必要的权限申请遵守运行环境要求。
 - 上述做法来自已发生的资产入库需求。不要据此擅自重整整个资产库、删除其他资产、覆盖同名内容或修改全局 MCP 配置。
 
+节点解释与诊断默认简短回答结论、实际影响及必要操作；用户追问再展开。明确要求教学或逐参数说明时再详细讲解，不把每次节点查询扩成完整教程。
+
 ## 连接、实例与现场
 
 1. 优先使用现有 Blender MCP 工具；首次连接读取插件状态和场景信息。
@@ -54,6 +56,8 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 工程卡顿、切换可见性延迟或节点求值慢：读取 [references/project-performance.md](references/project-performance.md)。从具体触发动作和当前有效分支做对照，区分实测与推测；简报定位、依据、可能原因和优先操作，硬件与底层细节按追问展开。
 - 创建或修改几何节点：按社区分流加载必要专题，并读取 [references/procedural-node-effects.md](references/procedural-node-effects.md) 中的高成本字段与烘焙输出要求；特别检查 Geometry Proximity 是否绕过 Bake 直通 Output Attributes。
 - 既有节点参数失效、效果迁移、几何/材质解耦、面板简化或基础粒子改造：读取 [references/procedural-node-effects.md](references/procedural-node-effects.md)，结合控制链、采样空间、接口映射与可恢复的视觉基线处理。
+- 用户常规三渲二双响应材质、风格化法线或 5.3 灯光节点：读取 [NPR 双响应基线与近期实践](references/npr-dual-response.md)，按现有信号链复用，区分原型和用户指定基线。
+- 可重新摆姿势的独立呼吸 NLA、Mixamo/Rigify 头肩起伏：读取 [呼吸参数层流程与验证](references/breathing-nla.md)，使用其中脚本与匹配窗口，保留基础 Action/NLA 和未插帧姿势。
 - 已有角色的蒙皮体检、左右串动或关节权重修补：加载社区绑定专题并读取 [references/skin-weight-repair.md](references/skin-weight-repair.md)，先用隔离动作证实问题；Rigify 分段映射或旧修复路线重试时按该参考读取案例。
 - 已有骨架角色按参考或文字意图摆静态动作：读取 [blender-character-posing](../blender-character-posing/SKILL.md)；本入口负责连接、现场保留与按需社区资料，姿势、手势和接触的判断由该技能负责。
 - 节点组或集合入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
