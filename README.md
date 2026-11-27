@@ -24,8 +24,9 @@
 
 一次性或临时性的综合需求，跨多个步骤/领域，按需沉淀、不进入长期技能索引：
 
-1. [wechat-chat-export](Special_Missions/微信聊天记录提取语料/SKILL.md) —— 微信 4.x 聊天记录解密导出，两条分支：(1) 可离线浏览的 HTML 归档（文字/图片/语音/文件/自定义表情全量还原）；(2) A/B 对话语料（切片、场景分类、隐私提示）。
+1. [wechat-chat-export](Special_Missions/微信聊天记录提取语料/SKILL.md) —— 微信 4.x 聊天记录解密导出，两条分支：(1) 可离线浏览的 HTML 归档（文字/图片/语音/文件/自定义表情全量还原）；(2) A/B 对话语料（切片、场景分类、隐私提示）；同一入口按需维护图片原生关联、四类书签与保存确认、全局搜索、资源缓存、社交来源合并及局域网访问边界，未完成探索另存案例。
 2. [auto-collect-triage](Special_Missions/自动剪藏素材分流/SKILL.md) —— 把「剪藏 → 手动搬运进素材库」自动化成本地脚本：读剪藏链接 → 下载视频/图片 → 入库 Eagle（打标签/记来源）→ 确认成功后再删源词条。沉淀「先确认两端接口能力再定架构、本地脚本优先于服务器常驻、入库成功后确认再删源」等方法论，以及多 Python 环境/下载器去重/MCP 中文编码等踩坑。
+3. [seiyuugraph-workflow](Special_Missions/seiyuugraph-workflow/SKILL.md) —— SeiyuuGraph 项目维护与交接：Bangumi 五状态同步、作品/角色/声优证据与地区、所选关系图与交互、持久缓存/闲时补齐、SQLite 迁移，以及 OSS 只读站和朋友空库发行；保留开发案例与验证边界。
 
 ## 目录约定
 
@@ -43,6 +44,7 @@ agent_skills_visn/
 ├── blog_setup/SKILL.md
 ├── Special_Missions/微信聊天记录提取语料/SKILL.md   # 微信聊天记录导出（HTML归档 + 语料两分支）
 ├── Special_Missions/自动剪藏素材分流/SKILL.md       # 剪藏→素材库自动化脚本（下载/入库/删源）
+├── Special_Missions/seiyuugraph-workflow/SKILL.md # 声优关系图谱的开发、数据与发行交接
 └── flomo_to_moment/    旧命令兼容入口，无独立 Skill
 ```
 
@@ -130,6 +132,30 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 ```
 
 第二条命令会在目标 Blender 中执行脚本，应先检查脚本内容；路径校验用于防止操作到另一个同名工程，不能替代文件写入权限或用户授权。
+
+### 在 Antigravity 中关联安装个人入口
+
+Antigravity 的用户级自定义目录是 `~/.gemini/config/`。在 Windows 环境下实测：插件 `skills/` 目录扫描不跟随目录联接（Junction），且 `skills.json` 中 `~/` 不会自动展开，因此采用**全局 `skills.json` 绝对路径直连 + 本地规则插件**的组合，同样保持本仓库为唯一维护来源：
+
+1. **全局技能直连（`~/.gemini/config/skills.json`，须保存为无 BOM 的 UTF-8）**：按实际仓库位置填入各领域目录的正斜杠绝对路径（每个入口向下扫描一层子目录）：
+
+```json
+{
+  "entries": [
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/concept-design" },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/blender" },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/3dprinter" },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/style3d" },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/ae" },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn", "include_only": ["blog_setup"] },
+    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/Special_Missions" }
+  ]
+}
+```
+
+2. **全局常驻规则（`~/.gemini/config/plugins/visn-skills/`）**：放置最小 `plugin.json` 与 `rules/AGENTS.md`，将“每次任务先核对个人技能库、命中先读 `SKILL.md`、高成本任务先粗估、收尾单次沉淀提醒、修改直接落盘源仓库”设为跨工作区常驻规则。
+
+配置后即时生效：技能读写直接指向仓库原文件；在已登记领域目录下新增子技能会自动被发现，仅当新建全新的顶层领域目录（如 `text/`）或根目录技能时需同步补充到 `skills.json`。
 
 ## 这份合集怎样记录我的习惯
 

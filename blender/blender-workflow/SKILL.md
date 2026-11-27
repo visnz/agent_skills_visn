@@ -63,6 +63,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 已有角色的蒙皮体检、左右串动或关节权重修补：加载社区绑定专题并读取 [references/skin-weight-repair.md](references/skin-weight-repair.md)，先用隔离动作证实问题；Rigify 分段映射或旧修复路线重试时按该参考读取案例。
 - 已有骨架角色按参考或文字意图摆静态动作：读取 [blender-character-posing](../blender-character-posing/SKILL.md)；本入口负责连接、现场保留与按需社区资料，姿势、手势和接触的判断由该技能负责。
 - 节点组或集合入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
+- 同一资产库使用多个 `.blend`、批量贴图入库，或出现“目录可见但资产为空”：在入库参考基础上读取 [references/asset-browser-compatibility.md](references/asset-browser-compatibility.md)，先核对当前 Blender 版本支持的资产类型，再区分文件内容、生成清单、同步缓存与界面筛选。
 - 同名资产更新、带控制器/材质驱动的系统同步：在入库参考基础上读取 [references/asset-sync.md](references/asset-sync.md)，先比较依赖与变更范围，保留库内布局，再验证实际联动。
 - 复盘本次操作或理解这些约定的来源：读取 [references/2026-10-30-water-normal.md](references/2026-10-30-water-normal.md)。其中路径仅为历史案例，执行前必须重新确认。
 - 复盘天空/涟漪/串珠/空气粒子的节点实践：读取 [references/2026-10-30-node-effects.md](references/2026-10-30-node-effects.md)。其中含参数回退、接口旧值与边界约束的反例，测试结果仅代表当时配置。

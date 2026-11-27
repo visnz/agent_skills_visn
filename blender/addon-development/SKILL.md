@@ -55,12 +55,14 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 - 实际使用分支、合并或项目留档时报告相应结果；未涉及的阶段不强制执行。
 - 按本次变更验证相关功能，区分语法、计算、后台和真实交互测试；未覆盖的 API/模式/分支明确说明。
 - 使用真实场景时核对本次测试数据已清理、必要现场已还原；文件保存、插件安装、重载和发布分别依授权处理。
+- 交付插件时区分源码仓库、磁盘安装副本与运行中实例；需要同步已授权的安装副本时先核对其基线和独立改动，再验证复制后的文件，不能把源码通过检查说成当前窗口已更新。
 - 技术陷阱按实际功能触发，图标/枚举或几何边界没有改动时不额外测试；案例方法不能代替当前版本与目标几何的核对。
 
 ## 按需读取
 
 - [references/repo-collaboration.md](references/repo-collaboration.md)：模块归属协议的具体执行方式、分支策略与合并冲突处理、留档格式。
 - [references/fotosketcher-shader-integration.md](references/fotosketcher-shader-integration.md)：所选图片节点接入外部图像处理器时的原图保护、尺寸与色彩、异步状态、版本差异及 pond_bekkan 的 FotoSketcher 映射；遇到这类功能再读。
-- [references/mcp-live-testing.md](references/mcp-live-testing.md)：真实 Blender 连接测试的现场保护、context override 写法、连接抖动处理。
+- [references/2026-11-16-to-22-pond-bekkan.md](references/2026-11-16-to-22-pond-bekkan.md)：AutoBlend、Fab、几何节点、只读工程检查与按材质 STL 导出的近期实践；开发这些功能或重试同类路线时按需读取，注意验证范围。
+- [references/mcp-live-testing.md](references/mcp-live-testing.md)：真实 Blender 连接与隔离测试的现场保护、版本/配置隔离、context override 和安装副本核对。
 - [references/world-space-bbox.md](references/world-space-bbox.md)：包围盒陷阱的技术细节与实测数据。
 - [references/2026-10-31-pond-bekkan-case.md](references/2026-10-31-pond-bekkan-case.md)：本技能依据的完整真实案例（pond_bekkan 插件一次会话内的 5 条分支开发与合并）。路径、分支名、具体数值仅代表当时现场，执行前须在当前仓库重新确认。

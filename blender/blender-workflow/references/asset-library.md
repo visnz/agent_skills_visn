@@ -41,6 +41,8 @@
 
 可用 `bpy.data.libraries.write(path, {group_copy}, fake_user=True, compress=True)` 输出最小中间 `.blend`，再用 `bpy.data.libraries.load(path, link=False)` 在目标追加。读取会携带 Blender 数据块依赖，但外部贴图文件的可移植性仍需单独核对。
 
+对象上若同时有主效果与单独的预览、诊断修改器，先按用户指定范围追踪各自引用的组及材质；只导出需要复用的部分。缩略图若含未入库的演示染色，在资产说明中标明它只是范围示意。目标库已有同名嵌套组时，比较接口、节点、连线及关键参数后再复用，并尽量在隔离场景以相同输入核对输出；同名或节点数量相同不足以证明等价。
+
 ### 集合导出与外部依赖
 
 要求导出文件交付时，在独立进程打开导出文件，逐项检查集合中的对象、数据、材质和节点组是否仍引用外部 Library，并核对外部图像是否已打包或可解析。源工程的 `bpy.data.libraries` 清单只说明整个工程有外部库，不能证明本次集合依赖它们。新版 Blender 的剪贴板复制也可能通过临时外部库完成；遇到路径或名称含 `copybuffer` 的库，先核对它是否只服务于本次复制、实际被哪些数据块引用，不能把它当作长期资产依赖，也不能按名称直接删除所有同类库。
@@ -83,6 +85,8 @@ group.asset_data.catalog_id = existing_catalog_uuid
 ```
 
 保留用户目录结构；选择含义匹配的现有分类。无适用分类时再按需求新增 UUID 和目录项，不重写整个 catalog 文件。
+
+同一资产库目录可以包含多个 `.blend`，共享根目录的分类定义；批量图片或远程资产的类型兼容与空目录排查见 [asset-browser-compatibility.md](asset-browser-compatibility.md)。
 
 注册目录和保存主文件是两个独立动作。确需注册时，先检查 `bpy.context.preferences.filepaths.asset_libraries` 是否已有同一路径；新增后用 `bpy.ops.wm.save_userpref()` 保存偏好。不要把“当前文件”列表中能看到资产误当成外部资产库已经注册。
 
