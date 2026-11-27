@@ -5,7 +5,7 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 
 # Blender 插件仓库开发
 
-对象是一个**插件的 Python 代码库**本身（operator、面板、注册流程、分支与协作记录），不是用户当前场景里的模型/材质/动画内容。后者属于 [blender-workflow](../blender-workflow/SKILL.md)。本技能记录的是在 pond_bekkan（蛙灾×桶桶双人维护的 Blender 5.2 插件）仓库中真实验证过的开发流程。
+对象是一个**插件的 Python 代码库**本身（operator、面板、注册流程、分支与协作记录），不是用户当前场景里的模型/材质/动画内容。后者属于 [blender-workflow](../blender-workflow/SKILL.md)。本技能记录的是在 pond_bekkan（蛙灾×桶桶双人维护、目标兼容 Blender 5.2 及以后版本的插件）仓库中真实验证过的开发流程。
 
 ## 什么时候用
 
@@ -62,6 +62,7 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 ## 按需读取
 
 - [references/repo-collaboration.md](references/repo-collaboration.md)：模块归属协议的具体执行方式、分支策略与合并冲突处理、留档格式。
+- [references/fotosketcher-shader-integration.md](references/fotosketcher-shader-integration.md)：所选图片节点接入外部图像处理器时的原图保护、尺寸与色彩、异步状态、版本差异及 pond_bekkan 的 FotoSketcher 映射；遇到这类功能再读。
 - [references/mcp-live-testing.md](references/mcp-live-testing.md)：真实 Blender 连接测试的现场保护、context override 写法、连接抖动处理。
 - [references/parent-transform-semantics.md](references/parent-transform-semantics.md)：分组、包裹父级、重挂层级或变换恢复时读取；区分世界保位、单选归零、多选差值与动画迁移。
 - [references/sky-sun-sync.md](references/sky-sun-sync.md)：World 天空与选中 Sun 联动时读取；目标解析、轴向计算、只改目标字段及相机/照明两路验证。
