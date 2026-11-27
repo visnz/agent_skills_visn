@@ -52,6 +52,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 
 - 普通场景查询或编辑：先读相关对象、材质、修改器等状态，再实施最小必要变更，按可观察结果验证。
 - 参考图白盒、Box 粗模、建筑与人物比例校正：读取 [references/whitebox-blockout.md](references/whitebox-blockout.md)，CG 静态帧以主相机构成与镜头内可信度优先，尺度作为基准，允许为构图调整隐藏空间；明确要求实景或多视角还原时保留相应尺寸约束。二维概括与三维搭建按用户当前阶段交付。案例证据及生图能力缺口见 [references/2026-11-09-courtyard-blockout.md](references/2026-11-09-courtyard-blockout.md)。
+- 新构图保留前景、只重排既有背景建筑，或参考“类似感觉”而非严格位置：读取 [references/whitebox-blockout.md](references/whitebox-blockout.md) 中的既有场景重构图流程，联合检查地面关系、留白、纵深和建筑重叠；原布局与强匹配版本的 50% 中点仅是值得尝试的候选。
 - 工程提示路径未找到、打包资源失败或转换后仍报告缺图：读取 [references/missing-resource-diagnosis.md](references/missing-resource-diagnosis.md)，核对图片状态与实际引用链，区分场景使用者和伪用户保留数据；与 MaxToBlender 既有 Checker 记录对照，诊断与清理分别按本次范围执行。
 - 工程卡顿、切换可见性延迟或节点求值慢：读取 [references/project-performance.md](references/project-performance.md)。从具体触发动作和当前有效分支做对照，区分实测与推测；简报定位、依据、可能原因和优先操作，硬件与底层细节按追问展开。
 - 创建或修改几何节点：按社区分流加载必要专题，并读取 [references/procedural-node-effects.md](references/procedural-node-effects.md) 中的高成本字段与烘焙输出要求；特别检查 Geometry Proximity 是否绕过 Bake 直通 Output Attributes。
