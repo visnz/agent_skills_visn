@@ -45,6 +45,8 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 ### 5. 按任务触发的 bpy 技术陷阱
 
 - **带恢复语义的开关要核对状态寿命**：插件支持代码热重载时，模块级字典可能在用户关闭开关前清空。让恢复快照在预期的重载流程中仍可取得，按钮状态以实际快照为准；丢失快照后不要猜测原设置。适用条件、验证顺序及案例见 [热重载状态参考](references/reloadable-ui-state.md)。
+- **父子级保位与局部 PSR 分开验收**：用户要读相对差值或单选归零时，只保持世界矩阵不够；不要把完整补偿藏进逆矩阵再留下旧通道。先确定局部语义，处理旋转模式、delta、剪切与原字段恢复，见 [父子级变换](references/parent-transform-semantics.md)。
+- **对象与节点有两套选择域**：联动脚本从当前编辑树解析活跃/选中节点，从场景选择解析对象；明确多目标规则、只写指定字段并验证撤销。Sky/Sun 的轴向和射线路由实测见 [天空同步](references/sky-sun-sync.md)。
 - **批量处理共享数据块要说明影响范围**：从选中对象的材质槽收集材质时先去重，再核对未选中对象是否也引用相同材质；按对象选取目标不等于修改只影响该对象。
 - **图标/枚举名用前查，不凭记忆**：不同版本/图标集合未必包含某个名字；用当前连接的 Blender 实际查询枚举（如 `bpy.types.UILayout.bl_rna.functions['prop'].parameters['icon'].enum_items`，事件类型查 `Event.bl_rna.properties['type'].enum_items`）确认存在再写进代码。
 - **世界空间包围盒不能用局部 bbox 整体变换**：物体局部空间包围盒（`obj.bound_box` 的 8 个角点）本身对圆柱等非箱形几何就比真实形状宽松；物体一旦被旋转，把这 8 个角点整体乘 `matrix_world` 再求 min/max，就是"盒子套盒子"，算出的世界空间范围会比真实几何更大。需要贴合物体实际旋转/缩放表现的边界时，要逐个真实几何点（mesh 顶点、曲线端点+贝塞尔手柄）变换到世界空间后再求 min/max。技术细节、验证数据和案例见 [references/world-space-bbox.md](references/world-space-bbox.md)。
@@ -63,6 +65,9 @@ description: 维护 Blender 插件代码库中的 operator、面板和注册功�
 - [references/repo-collaboration.md](references/repo-collaboration.md)：模块归属协议的具体执行方式、分支策略与合并冲突处理、留档格式。
 - [references/fotosketcher-shader-integration.md](references/fotosketcher-shader-integration.md)：所选图片节点接入外部图像处理器时的原图保护、尺寸与色彩、异步状态、版本差异及 pond_bekkan 的 FotoSketcher 映射；遇到这类功能再读。
 - [references/2026-11-16-to-22-pond-bekkan.md](references/2026-11-16-to-22-pond-bekkan.md)：AutoBlend、Fab、几何节点、只读工程检查与按材质 STL 导出的近期实践；开发这些功能或重试同类路线时按需读取，注意验证范围。
-- [references/mcp-live-testing.md](references/mcp-live-testing.md)：真实 Blender 连接与隔离测试的现场保护、版本/配置隔离、context override 和安装副本核对。
+- [references/mcp-live-testing.md](references/mcp-live-testing.md)：真实 Blender 连接与隔离图形测试的现场保护、版本/配置隔离、context override、撤销/重做与截图验证、连接抖动处理和安装副本核对。
+- [references/parent-transform-semantics.md](references/parent-transform-semantics.md)：分组、包裹父级、重挂层级或变换恢复时读取；区分世界保位、单选归零、多选差值与动画迁移。
+- [references/sky-sun-sync.md](references/sky-sun-sync.md)：World 天空与选中 Sun 联动时读取；目标解析、轴向计算、只改目标字段及相机/照明两路验证。
+- [references/2026-11-27-parent-sky-case.md](references/2026-11-27-parent-sky-case.md)：遇到中心正确但局部值不对、矩阵恢复丢通道、截图仍显示旧活跃对象，或重试这几条路线时读取；保留两版实测条件与反例。
 - [references/world-space-bbox.md](references/world-space-bbox.md)：包围盒陷阱的技术细节与实测数据。
 - [references/2026-10-31-pond-bekkan-case.md](references/2026-10-31-pond-bekkan-case.md)：本技能依据的完整真实案例（pond_bekkan 插件一次会话内的 5 条分支开发与合并）。路径、分支名、具体数值仅代表当时现场，执行前须在当前仓库重新确认。
