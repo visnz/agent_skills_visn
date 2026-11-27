@@ -1,2 +1,19 @@
 __pycache__/
-*.pyc
+*.py[cod]
+
+# 运行期配置与凭证（严禁入库）
+.env
+.env.*
+config.yaml
+*cookies*.json
+*cookie*.txt
+*.key
+*.pem
+
+# 本地状态、数据库与临时文件
+state.json
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3

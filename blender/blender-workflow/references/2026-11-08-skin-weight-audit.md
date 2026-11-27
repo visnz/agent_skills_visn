@@ -40,7 +40,7 @@ Blender 5.2.3 LTS，旧角色权重转换到 Rigify，含独立呼吸 NLA、头�
 
 ## 历史证据入口
 
-当时工作目录 `C:\Users\zyvis\Documents\ChatGPT\Blender`，路径不是默认配置，复用前确认存在、内容和对应版本。
+当时工作目录 `C:\Users\<user>\Documents\ChatGPT\Blender`，路径不是默认配置，复用前确认存在、内容和对应版本。
 
 - `basic_weight_repair/cross_weight_audit.json`：761 点前后分配；`movement_validation.json` 和 `saved_file_verification.json`：隔离动作与重开验证；`左右脚串动_修补对照.png`：实拍对照。
 - `whole_model_weight_audit/whole_model_audit.json`：全网格分组/孤岛；`test_results.json`：19 项；`extra_results.json`：30 指关节、肩包与拓扑；`final_verification.json`、`saved_copy_reopened.json`：源数据和保存副本校验；`全身蒙皮检查_前侧对照.png`：前侧图。

@@ -51,7 +51,7 @@
 
 独立重开验证权重/姿势持久化；中立求值偏差约2.46e-6模型单位，抽查1、37、73、97帧脚踝稳定；左右大腿分别转10°时，对侧下肢/鞋最大位移为0，正常侧仍运动。哥哥、头发及原网格坐标校验通过。只代表这些样本，不代表完整动画、任意姿势或完整参考还原通过。
 
-历史证据位于当时工作目录 `C:\Users\zyvis\Documents\ChatGPT\Blender`：
+历史证据位于当时工作目录 `C:\Users\<user>\Documents\ChatGPT\Blender`：
 
 - `girl_pose_retry/尝试记录.md`、`variants.json`：上一轮粗姿势重试、未采用的轴向候选。最终手部认可不覆盖这一轮未达标的状态。
 - `girl_pose_refine2/修正说明.md`、`applied.json`、`saved_verification.json`：采用范围、3,951点、保存与动态验证。

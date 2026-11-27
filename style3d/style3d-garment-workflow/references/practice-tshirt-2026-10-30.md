@@ -29,7 +29,7 @@
 
 ## 实际产物
 
-原始任务输出目录：`C:/Users/yue.zhao04/Documents/Codex/2026-10-30/ch/outputs/`
+原始任务输出目录：`C:/Users/<user>/Documents/Codex/2026-10-30/ch/outputs/`
 
 - `Basic_TShirt.sproj`：约 31.6 MB，可编辑的模特、纸样、缝合及材质工程。
 - `TShirt_Front.png`、`TShirt_Back.png`、`TShirt_Left.png`：1000 × 1400 三视图。

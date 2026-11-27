@@ -39,6 +39,7 @@ agent_skills_visn/
 │   ├── blender-workflow/SKILL.md
 │   ├── blender-character-posing/SKILL.md
 │   └── addon-development/SKILL.md
+├── 3dprinter/3d-print-analysis/SKILL.md
 ├── style3d/style3d-garment-workflow/SKILL.md
 ├── ae/ae-mcp-workflow/SKILL.md
 ├── blog_setup/SKILL.md
@@ -107,14 +108,14 @@ Codex 当前的用户级技能目录是 `~/.agents/skills/`，支持链接到仓
 本机采用 Windows 目录联接（junction），保持仓库为唯一维护来源：
 
 ```text
-C:\Users\zyvis\.agents\skills\blender-workflow
-  → C:\Users\zyvis\Documents\git\agent_skills_visn\blender\blender-workflow
+C:\Users\<user>\.agents\skills\blender-workflow
+  → C:\Users\<user>\Documents\git\agent_skills_visn\blender\blender-workflow
 ```
 
 新机器上可以在 PowerShell 中创建相同关联，按实际位置调整仓库路径：
 
 ```powershell
-$skillSource = 'C:\Users\zyvis\Documents\git\agent_skills_visn\blender\blender-workflow'
+$skillSource = 'C:\Users\<user>\Documents\git\agent_skills_visn\blender\blender-workflow'
 $skillsDirectory = Join-Path $env:USERPROFILE '.agents\skills'
 New-Item -ItemType Directory -Path $skillsDirectory -Force
 New-Item -ItemType Junction -Path (Join-Path $skillsDirectory 'blender-workflow') -Target $skillSource
@@ -137,18 +138,18 @@ python blender/blender-workflow/scripts/blender_rpc.py run --port 9875 --expect-
 
 Antigravity 的用户级自定义目录是 `~/.gemini/config/`。在 Windows 环境下实测：插件 `skills/` 目录扫描不跟随目录联接（Junction），且 `skills.json` 中 `~/` 不会自动展开，因此采用**全局 `skills.json` 绝对路径直连 + 本地规则插件**的组合，同样保持本仓库为唯一维护来源：
 
-1. **全局技能直连（`~/.gemini/config/skills.json`，须保存为无 BOM 的 UTF-8）**：按实际仓库位置填入各领域目录的正斜杠绝对路径（每个入口向下扫描一层子目录）：
+1. **全局技能直连（`~/.gemini/config/skills.json`，须保存为无 BOM 的 UTF-8）**：按实际仓库位置填入各领域目录的正斜杠绝对路径（将 `<user>` 替换为实际本机用户名，每个入口向下扫描一层子目录）：
 
 ```json
 {
   "entries": [
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/concept-design" },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/blender" },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/3dprinter" },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/style3d" },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/ae" },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn", "include_only": ["blog_setup"] },
-    { "path": "C:/Users/zyvis/Documents/git/agent_skills_visn/Special_Missions" }
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/concept-design" },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/blender" },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/3dprinter" },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/style3d" },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/ae" },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn", "include_only": ["blog_setup"] },
+    { "path": "C:/Users/<user>/Documents/git/agent_skills_visn/Special_Missions" }
   ]
 }
 ```

@@ -57,7 +57,7 @@
 - 角色的骨架核对场景显示实际骨段，能排除网格观感干扰；粗姿势是否最终满意仍需用户判断。
 - 用户要求“大骨架确认后再问是否做双手双脚局部细节”，该阶段未开始；不能把粗手腕/踝部适配算作细节验收。
 
-历史产物在当时工作目录 `C:\Users\zyvis\Documents\ChatGPT\Blender\pose_proxy_trial`：`proxy_fit.json`、`generation_prompt.txt`、代理 `.blend` 与对照图；`mapping/` 下有映射前副本、FK基础姿势副本、`final_delivery.json`、`verify_delivery.py` 和骨架/网格对照图。剪贴板临时原图后来失效，通过已打包图像恢复到工作目录。以上路径与固定骨名是历史证据，不是未来默认参数。
+历史产物在当时工作目录 `C:\Users\<user>\Documents\ChatGPT\Blender\pose_proxy_trial`：`proxy_fit.json`、`generation_prompt.txt`、代理 `.blend` 与对照图；`mapping/` 下有映射前副本、FK基础姿势副本、`final_delivery.json`、`verify_delivery.py` 和骨架/网格对照图。剪贴板临时原图后来失效，通过已打包图像恢复到工作目录。以上路径与固定骨名是历史证据，不是未来默认参数。
 
 本次拟合与映射脚本包含固定角色、固定标注及未泛化的候选选择，保留在任务目录，没有复制为技能的通用自动脚本。
 

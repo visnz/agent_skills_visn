@@ -94,7 +94,7 @@ Greater Than 目前先产生二值，再进色带；不能因色带有三个色�
 
 ## 证据、验证与来源
 
-- 当时工作目录 `C:/Users/zyvis/Documents/ChatGPT/Blender/`：`npr_explanation_20261115/user_dual_response_shader_audit.json`（已将精简结构清单收在本参考旁）、`node_probe.json`、`probe_light_nodes_53.py`；`busstop_npr_20261114/npr_bus.py`、`改动与验证.txt`、`look_verification.json`、`probe.log`。这些是历史定位，不要求新机器具备该目录。
+- 当时工作目录 `C:/Users/<user>/Documents/ChatGPT/Blender/`：`npr_explanation_20261115/user_dual_response_shader_audit.json`（已将精简结构清单收在本参考旁）、`node_probe.json`、`probe_light_nodes_53.py`；`busstop_npr_20261114/npr_bus.py`、`改动与验证.txt`、`look_verification.json`、`probe.log`。这些是历史定位，不要求新机器具备该目录。
 - 当前基线是现场只读复盘，用户指定作为常规起点；未声称跨项目验证、各镜头渲染认可或在 Cycles 可用。
 - [开发者模型与使用说明](https://forum.blender.org/t/material-lighting-nodes-feedback/45695)、[官方 Light Evaluation](https://docs.blender.org/manual/en/5.3/render/shader_nodes/input/light_evaluation.html)、[World Sun](https://docs.blender.org/manual/en/5.3/render/eevee/world_settings.html)。后续版本应重新核对接口，不能照抄开发阶段旧截图。
 - FotoSketcher Shader 面板集成不在本轮验证范围；最新开发状态另读 [插件维护入口](../../addon-development/SKILL.md)。不能依据这份旧需求回顾断言它当前已完成或未完成。
