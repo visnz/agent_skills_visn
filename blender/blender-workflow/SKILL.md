@@ -1,6 +1,6 @@
 ---
 name: blender-workflow
-description: 操作用户正在使用的 Blender，结合个人现场保留规则与按需社区专题，处理场景查询、工程性能分析、资源缺失排查、几何节点创建、参考图白盒搭建、静态帧构图与比例校正、建模、材质、灯光、绑定、插件开发和资产整理；重点包括当前选择、多实例、跨工程复制、节点组入库与缩略图验证。
+description: 操作用户正在使用的 Blender，结合个人现场保留规则与按需社区专题，处理场景查询、工程性能分析、资源缺失排查、几何节点创建、参考图白盒与二次元网格头发、静态帧构图与比例校正、建模、材质、灯光、绑定、插件开发和资产整理；重点包括当前选择、多实例、跨工程复制、节点组入库与缩略图验证。
 ---
 
 # Blender 个人工作流
@@ -63,6 +63,7 @@ python scripts/prepare_community_skills.py --skills blender-scene-setup blender-
 - 可重新摆姿势的独立呼吸 NLA、Mixamo/Rigify 头肩起伏：读取 [呼吸参数层流程与验证](references/breathing-nla.md)，使用其中脚本与匹配窗口，保留基础 Action/NLA 和未插帧姿势。
 - 已有角色的蒙皮体检、左右串动或关节权重修补：加载社区绑定专题并读取 [references/skin-weight-repair.md](references/skin-weight-repair.md)，先用隔离动作证实问题；Rigify 分段映射或旧修复路线重试时按该参考读取案例。
 - 已有绑定角色按参考图校准素体比例、局部体态融合、二次元五官/眼型睫毛与瞳距形态键拆分或同步关节控制器：加载社区雕刻、绑定、面部形态键与材质/渲染专题，并读取 [references/character-silhouette-fitting.md](references/character-silhouette-fitting.md)；先锁定参考图世界坐标、当前姿态逆蒙皮映射与用户已调滑块值，剥离二维遮挡并保证人体与眼窝解剖正确，五官阶段遵守眼内高光/半透明层零写入与细分皮肤正向 BVH 防穿模，必要时同步绑定层并重置 `StretchTo`。
+- 二次元网格头发参考识别、主团修形或独立重建：读取 [references/anime-mesh-hair.md](references/anime-mesh-hair.md)，先分清连续主团、游离细束与遮挡接入，再协调路径、宽厚和局部接合；真实人体与头发支撑层分开检查。类似根部孔、鼓包、轮廓越修越怪或准备重试旧路线时，再读该流程引用的马尾探索案例；语义识别、完整可见轮廓、几何 QA 和保存分别验收。
 - 已有骨架角色按参考或文字意图摆静态动作：读取 [blender-character-posing](../blender-character-posing/SKILL.md)；本入口负责连接、现场保留与按需社区资料，姿势、手势和接触的判断由该技能负责。
 - 节点组或集合入库、跨工程追加、资产缩略图：读取 [references/asset-library.md](references/asset-library.md)。其中包括实例参数、依赖、分类、主文件合并、嵌入预览及磁盘验证。
 - 同一资产库使用多个 `.blend`、批量贴图入库，或出现“目录可见但资产为空”：在入库参考基础上读取 [references/asset-browser-compatibility.md](references/asset-browser-compatibility.md)，先核对当前 Blender 版本支持的资产类型，再区分文件内容、生成清单、同步缓存与界面筛选。
